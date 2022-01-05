@@ -28,6 +28,9 @@ namespace Portfolio_Builder
             items.Add(new Market() { Title = "Template 1", SubSectors = { "Energie", "Landwirtschaft", "Metalle" }, TimeFrames = {"1M","2M","3M","6M","1Y","3Y","5Y" }});
             items.Add(new Market() { Title = "Template 2", SubSectors = { "Energie", "Landwirtschaft", "Metalle" }, TimeFrames = {"1M","2M","3M","6M","1Y","3Y","5Y" }});
             items.Add(new Market() { Title = "Template 3", SubSectors = { "Energie", "Landwirtschaft", "Metalle" }, TimeFrames = {"1M","2M","3M","6M","1Y","3Y","5Y" }});
+            items.Add(new Market() { Title = "Template 4", SubSectors = { "Energie", "Landwirtschaft", "Metalle" }, TimeFrames = {"1M","2M","3M","6M","1Y","3Y","5Y" }});
+            items.Add(new Market() { Title = "Template 5", SubSectors = { "Energie", "Landwirtschaft", "Metalle" }, TimeFrames = {"1M","2M","3M","6M","1Y","3Y","5Y" }});
+            items.Add(new Market() { Title = "Template 6", SubSectors = { "Energie", "Landwirtschaft", "Metalle" }, TimeFrames = {"1M","2M","3M","6M","1Y","3Y","5Y" }});
 
             Indices.ItemsSource = items;
             Stocks.ItemsSource = items;

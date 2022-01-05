@@ -18,96 +18,110 @@
             </Grid.RowDefinitions>
             <Button Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,10" Width="2000" FontSize="25" Content="Basiswert suchen 🔍"/>
             <ScrollViewer Grid.Row="1">
-                <WrapPanel HorizontalAlignment="Center">
-                    <TextBlock FontSize="60" Height="100" Margin="0,20,0,5" Text="Globale Märkte"/>
-                    <ItemsControl Name="Indices" HorizontalAlignment="Center">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="Black" BorderThickness="1" Padding="20" Margin="20">
-                                    <Grid Margin="10" Width="500" Height="750" >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="50"/>
-                                            <RowDefinition Height="35"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="35"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="30"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" FontSize="35" TextDecorations="Underline"  Text="{Binding Title}" />
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                            <Button Margin="1">Alle</Button>
-                                            <Button Margin="1">Gewinner</Button>
-                                            <Button Margin="1">Verlierer</Button>
-                                        </StackPanel>
-                                        <TextBlock Grid.Row="2" FontSize="50" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Chart}" />
-                                        <GridSplitter Grid.Row="3" Height="3" Margin="1" Background="Black" HorizontalAlignment="Stretch" />
-                                        <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                            <Button Margin="1">6M</Button>
-                                            <Button Margin="1">1Y</Button>
-                                            <Button Margin="1">3Y</Button>
-                                            <Button Margin="1">5Y</Button>
-                                            <Button Margin="1">Max</Button>
-                                        </StackPanel>
-                                        <TextBlock Grid.Row="4" Text="{Binding Symbols}" />
-                                        <TextBlock Grid.Row="5" Text="{Binding OpenAll}" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock FontSize="60" Height="100" Margin="0,20,0,5">Einzelne Aktien</TextBlock>
-                    <ItemsControl Name="Stocks" HorizontalAlignment="Center">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="Black" BorderThickness="1" Padding="20" Margin="20">
-                                    <Grid Margin="10" Width="500" Height="750" >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="50"/>
-                                            <RowDefinition Height="35"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="35"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="30"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" FontSize="35" TextDecorations="Underline"  Text="{Binding Title}" />
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                            <Button Margin="1">Alle</Button>
-                                            <Button Margin="1">Gewinner</Button>
-                                            <Button Margin="1">Verlierer</Button>
-                                        </StackPanel>
-                                        <TextBlock Grid.Row="2" FontSize="50" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Chart}" />
-                                        <GridSplitter Grid.Row="3" Height="3" Padding="1" Background="Black" HorizontalAlignment="Stretch" />
-                                        <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                            <Button Margin="1">6M</Button>
-                                            <Button Margin="1">1Y</Button>
-                                            <Button Margin="1">3Y</Button>
-                                            <Button Margin="1">5Y</Button>
-                                            <Button Margin="1">Max</Button>
-                                        </StackPanel>
-                                        <TextBlock Grid.Row="4" Text="{Binding Symbols}" />
-                                        <TextBlock Grid.Row="5" Text="{Binding OpenAll}" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </WrapPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" FontSize="30" Height="40" Margin="100,5,0,5" Text="Globale Märkte"/>
+                    <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                        <ItemsControl Name="Indices" HorizontalAlignment="Center" Margin="20,0,0,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Black" BorderThickness="1" Padding="20" Margin="20">
+                                        <Grid Margin="10" Width="500" Height="650" >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="50"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="30"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0" FontSize="25" TextDecorations="Underline"  Text="{Binding Title}" />
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                                <Button Margin="1">Alle</Button>
+                                                <Button Margin="1">Gewinner</Button>
+                                                <Button Margin="1">Verlierer</Button>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="2" FontSize="50" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Chart}" />
+                                            <GridSplitter Grid.Row="3" Height="3" Margin="1" Background="Black" HorizontalAlignment="Stretch" />
+                                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                                <Button Margin="1">6M</Button>
+                                                <Button Margin="1">1Y</Button>
+                                                <Button Margin="1">3Y</Button>
+                                                <Button Margin="1">5Y</Button>
+                                                <Button Margin="1">Max</Button>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="4" Text="{Binding Symbols}" />
+                                            <TextBlock Grid.Row="5" Text="{Binding OpenAll}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </WrapPanel>
+                    <TextBlock Grid.Row="2" FontSize="30" Height="40" Margin="100,5,0,5">Einzelne Aktien</TextBlock>
+                    <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ItemsControl Name="Stocks" HorizontalAlignment="Center" Margin="40,0,0,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Black" BorderThickness="1" Padding="20" Margin="20">
+                                        <Grid Margin="10" Width="500" Height="650" >
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="50"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="30"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0" FontSize="25" TextDecorations="Underline"  Text="{Binding Title}" />
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                                <Button Margin="1">Alle</Button>
+                                                <Button Margin="1">Gewinner</Button>
+                                                <Button Margin="1">Verlierer</Button>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="2" FontSize="50" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Chart}" />
+                                            <GridSplitter Grid.Row="3" Height="3" Padding="1" Background="Black" HorizontalAlignment="Stretch" />
+                                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                                <Button Margin="1">6M</Button>
+                                                <Button Margin="1">1Y</Button>
+                                                <Button Margin="1">3Y</Button>
+                                                <Button Margin="1">5Y</Button>
+                                                <Button Margin="1">Max</Button>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="4" Text="{Binding Symbols}" />
+                                            <TextBlock Grid.Row="5" Text="{Binding OpenAll}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
             </ScrollViewer>
         </Grid>
     </Grid>
