@@ -10,13 +10,7 @@
   <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.7" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\" />
-    <Folder Include="BusinessLogic\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Models\" />
+    <PackageReference Include="MySqlConnector" Version="2.1.2" />
   </ItemGroup>
 
 </Project>

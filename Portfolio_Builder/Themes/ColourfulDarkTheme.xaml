@@ -157,7 +157,10 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Height" Value="20"/>
         <Setter Property="Padding" Value="1"/>
+        <Setter Property="Margin" Value="0,0,15,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -1080,8 +1083,8 @@
     <Style TargetType="{x:Type Expander}">
         <Setter Property="Foreground" Value="{DynamicResource ControlDefaultForeground}"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <!--<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>-->
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontStyle" Value="Normal"/>
@@ -2710,6 +2713,8 @@
     <Style TargetType="{x:Type ScrollViewer}" x:Key="HorizontalScroller">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
         <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="Template">
@@ -3564,7 +3569,7 @@
     <Style TargetType="{x:Type TextBlock}">
         <Setter Property="TextWrapping" Value="NoWrap"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}"/>
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
