@@ -52,18 +52,21 @@ namespace Portfolio_Builder.ViewModels
 
             _stockHeadline = "Einzelne Aktien";
             _stockCardCollection = new ObservableCollection<AssetCardModel>();
-            AddAssetCard("AMZN");
-            AddAssetCard("AAPL");
-            AddAssetCard("GOOG");
-            AddAssetCard("AMZN");
-            AddAssetCard("AAPL");
-            AddAssetCard("GOOG");
+            //AddAssetCard("AMZN");
+            //AddAssetCard("AAPL");
+            //AddAssetCard("GOOG");
+            //AddAssetCard("AMZN");
 
 
-            AddAssetCardCommand = new RelayCommand(() => AddAssetCard("GOOG"));
+            _addAssetCardCommand = new RelayCommand(() => AddAssetCard("GOOG"));
         }
 
-        public RelayCommand AddAssetCardCommand;
+        private RelayCommand _addAssetCardCommand;
+        public RelayCommand AddAssetCardCommand
+        {
+            get => _addAssetCardCommand;
+            set => SetProperty(ref _addAssetCardCommand, value);
+        }
 
         public void AddAssetCard(string assetTickerSymbol)
         {

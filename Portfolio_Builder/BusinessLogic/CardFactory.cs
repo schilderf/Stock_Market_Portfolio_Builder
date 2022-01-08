@@ -11,6 +11,7 @@ namespace Portfolio_Builder.BusinessLogic
     public class CardFactory
     {
         private DatabaseManagement databaseManagement = new DatabaseManagement();
+        private ChartFactory chartFactory = new ChartFactory();
 
         public AssetCardModel CreateAssetCard(string assetTickerSymbol)
         {
@@ -19,6 +20,7 @@ namespace Portfolio_Builder.BusinessLogic
             AssetCardModel assetCardModel = new AssetCardModel();
             assetCardModel.Symbol = asset.Symbol;
             assetCardModel.Name = asset.Name;
+            assetCardModel.PriceChart = chartFactory.InitializeAssetChart(asset);
             assetCardModel.PriceChanges = CalculatePerformances(assetTickerSymbol);
             assetCardModel.MaxValues = FindMaxValues(assetTickerSymbol);
             assetCardModel.MinValues = FindMinValues(assetTickerSymbol);

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Portfolio_Builder" 
         xmlns:viewmodel="clr-namespace:Portfolio_Builder.ViewModels" 
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Style="{DynamicResource CustomWindowStyle}"
@@ -105,15 +106,33 @@
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" FontSize="{Binding SymbolFontSize}" Text="{Binding Symbol}" />
                                             <TextBlock Grid.Row="1" FontSize="{Binding NameFontSize}" Text="{Binding Name}" />
-                                            <TextBlock Grid.Row="2" FontSize="50" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Chart}" />
+                                            <lvc:CartesianChart Grid.Row="2" Series="{Binding PriceChart}" Zoom="Xy">
+                                                <lvc:CartesianChart.DataTooltip>
+                                                    <lvc:DefaultTooltip  Background="DarkSlateBlue" Foreground="White" CornerRadius="2" BorderThickness="0.5" BorderBrush="MediumSlateBlue" ShowSeries="False" ShowTitle="False" SelectionMode="OnlySender"/>
+                                                </lvc:CartesianChart.DataTooltip>
+                                                <lvc:CartesianChart.AxisX>
+                                                    <lvc:Axis LabelFormatter="{Binding XFormatter}" MinValue="{Binding MinXChartValue}" MaxValue="{Binding MaxXChartValue}">
+                                                        <lvc:Axis.Separator >
+                                                            <lvc:Separator StrokeThickness="0.1" Step="{Binding SeparatorStep}"/>
+                                                        </lvc:Axis.Separator>
+                                                    </lvc:Axis>
+                                                </lvc:CartesianChart.AxisX>
+                                                <lvc:CartesianChart.AxisY>
+                                                    <lvc:Axis LabelFormatter="{Binding YFormatter}">
+                                                        <lvc:Axis.Separator >
+                                                            <lvc:Separator StrokeThickness="0.1"/>
+                                                        </lvc:Axis.Separator>
+                                                    </lvc:Axis>
+                                                </lvc:CartesianChart.AxisY>
+                                            </lvc:CartesianChart>
                                             <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" Background="#FF1c1c1c" />
                                             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}">3M</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}">6M</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}">1Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}">3Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}">5Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}">Max</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}">3M</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}">6M</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame1Y}">1Y</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3Y}">3Y</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame5Y}">5Y</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame10Y>}">Max</Button>
                                             </StackPanel>
                                             <Grid Grid.Row="4">
                                                 <Grid.RowDefinitions>
