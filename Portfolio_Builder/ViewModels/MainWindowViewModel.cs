@@ -13,7 +13,7 @@ namespace Portfolio_Builder.ViewModels
 {
     public class MainWindowViewModel : ObservableObject
     {
-        private AssetCardCreator assetCardCreator = new AssetCardCreator();
+        private CardFactory assetCardCreator = new CardFactory();
 
         private string _marketHeadline;
 

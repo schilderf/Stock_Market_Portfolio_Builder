@@ -37,8 +37,8 @@ namespace Portfolio_Builder.Models
             get => _nameFontSize;
         }
 
-        private double _currentPrice;
-        public double CurrentPrice
+        private string _currentPrice;
+        public string CurrentPrice
         {
             get => _currentPrice;
             set => SetProperty(ref _currentPrice, value);
@@ -48,6 +48,12 @@ namespace Portfolio_Builder.Models
         public int CurrentPriceFontSize
         {
             get => _currentPriceFontSize;
+        }
+
+        private string _currentPriceCaption;
+        public string CurrentPriceCaption
+        {
+            get => _currentPriceCaption;
         }
 
         private SeriesCollection _priceChart;
@@ -82,6 +88,7 @@ namespace Portfolio_Builder.Models
         {
             _symbol = "";
             _name = "";
+            _currentPrice = "";
             _priceChart = new SeriesCollection();
             _priceChanges = new ObservableCollection<PerformanceCardModel>();
             _maxValues = new ObservableCollection<PerformanceCardModel>();
@@ -89,10 +96,11 @@ namespace Portfolio_Builder.Models
 
             _symbolFontSize = 25;
             _nameFontSize = 15;
-            _currentPriceFontSize = 25;
+            _currentPriceFontSize = 30;
+            _currentPriceCaption = "Aktueller Preis:";
         }
 
-        public AssetCardModel(string symbol, string name, SeriesCollection priceChart)
+        public AssetCardModel(string symbol, string name, SeriesCollection priceChart) : this()
         {
             _symbol = symbol;
             _name = name;
@@ -100,10 +108,6 @@ namespace Portfolio_Builder.Models
             _priceChanges = new ObservableCollection<PerformanceCardModel>();
             _maxValues = new ObservableCollection<PerformanceCardModel>();
             _minValues = new ObservableCollection<PerformanceCardModel>();
-
-            _symbolFontSize = 25;
-            _nameFontSize = 10;
-            _currentPriceFontSize = 25;
         }
     }
 }

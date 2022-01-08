@@ -104,12 +104,39 @@ namespace Portfolio_Builder.BusinessLogic
 
         }
 
-        public double FindMaxValue(string assetTickerSymbol, DateTime startingDate)
+        public double GetSingleClosingPrice(string assetTickerSymbol, DateTime date)
         {
-            double result = 0.0;
+            double result = default;
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Max(Daily_High) From Asset_Data where symbol = '{assetTickerSymbol}' and Date > '{startingDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
+                string sqlQueryText = $"Select Closing_Price From Asset_Data where symbol = '{assetTickerSymbol}' and Date <= '{date.ToString("yyyy-MM-dd HH:mm:ss")}' Order By Date Desc Limit 1";
+                MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    try
+                    {
+                        result = ConvertToDouble(dataReader["Closing_Price"].ToString() ?? "");
+                    }
+                    catch (Exception)
+                    {
+                        result = Double.NaN;
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return Math.Round(result,2);
+        }
+
+        public double FindMaxValue(string assetTickerSymbol, DateTime startingDate)
+        {
+            double result = default;
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Max(Daily_High) From Asset_Data where symbol = '{assetTickerSymbol}' and Date >= '{startingDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
                 MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
@@ -121,21 +148,21 @@ namespace Portfolio_Builder.BusinessLogic
                     }
                     catch (Exception)
                     {
-                        result = 0.0;
+                        result = Double.NaN;
                     }
                 }
                 dataReader.Close();
 
                 this.CloseConnection();
             }
-            return result;
+        return result;
         }
         public double FindMinValue(string assetTickerSymbol, DateTime startingDate)
         {
-            double result = 0.0;
+            double result = default;
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Min(Daily_Low) From Asset_Data where symbol = '{assetTickerSymbol}' and Date > '{startingDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
+                string sqlQueryText = $"Select Min(Daily_Low) From Asset_Data where symbol = '{assetTickerSymbol}' and Date >= '{startingDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
                 MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
@@ -147,7 +174,7 @@ namespace Portfolio_Builder.BusinessLogic
                     }
                     catch (Exception)
                     {
-                        result = 0.0;
+                        result = Double.NaN;
                     }
                 }
                 dataReader.Close();

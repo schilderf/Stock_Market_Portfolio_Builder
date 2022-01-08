@@ -8,29 +8,32 @@ namespace Portfolio_Builder.BusinessLogic
 {
     public class AssetDay
     {
-        private DateTime _date;
-
-        private double _openingPrice;
+        private readonly DateTime _date;
+        public DateTime Date
+        {
+            get => _date;
+        }
+        private readonly double _openingPrice;
         public double OpeningPrice
         {
             get => _openingPrice;
         }
-        private double _closingPrice;
+        private readonly double _closingPrice;
         public double ClosingPrice
         {
             get => _closingPrice;
         }
-        private double _dailyHigh;
+        private readonly double _dailyHigh;
         public double DailyHigh
         {
             get => _dailyHigh;
         }
-        private double _dailyLow;
+        private readonly double _dailyLow;
         public double DailyLow
         {
             get => _dailyLow;
         }
-        private double _dailyVolume;
+        private readonly double _dailyVolume;
         public double DailyVolume
         {
             get => _dailyVolume;

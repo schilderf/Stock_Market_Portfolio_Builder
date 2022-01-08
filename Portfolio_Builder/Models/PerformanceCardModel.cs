@@ -28,8 +28,8 @@ namespace Portfolio_Builder.Models
         {
             get => _height;
         }
-        private double _value;
-        public double Value
+        private string _value;
+        public string Value
         {
             get => _value;
             set => _value = value;
@@ -40,9 +40,9 @@ namespace Portfolio_Builder.Models
             get => _timeframe;
             set => _timeframe = value;
         }
-        public PerformanceCardModel(double value, string timeframe)
+        public PerformanceCardModel(double value, string timeframe, string sign)
         {
-            _value = value;
+            _value = $"{value}{sign}";
             _timeframe = timeframe;
             _kpiFontSize = 20;
             _captionFontSize = 10;
