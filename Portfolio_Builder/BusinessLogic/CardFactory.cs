@@ -10,14 +10,14 @@ namespace Portfolio_Builder.BusinessLogic
 {
     public class CardFactory
     {
-        private DatabaseManagement databaseManagement = new DatabaseManagement();
-        private ChartFactory chartFactory = new ChartFactory();
+        private readonly DatabaseManagement databaseManagement = new();
+        private readonly ChartFactory chartFactory = new();
 
         public AssetCardModel CreateAssetCard(string assetTickerSymbol)
         {
             Asset asset = databaseManagement.CreateAsset(assetTickerSymbol);
 
-            AssetCardModel assetCardModel = new AssetCardModel();
+            AssetCardModel assetCardModel = new();
             assetCardModel.Symbol = asset.Symbol;
             assetCardModel.Name = asset.Name;
             assetCardModel.PriceChart = chartFactory.InitializeAssetChart(asset);
@@ -32,7 +32,7 @@ namespace Portfolio_Builder.BusinessLogic
         }
         private ObservableCollection<PerformanceCardModel> CalculatePerformances(string assetTickerSymbol)
         {
-            ObservableCollection<PerformanceCardModel> results = new ObservableCollection<PerformanceCardModel>();
+            ObservableCollection<PerformanceCardModel> results = new();
 
             foreach (int timeframe in GetTimeframes())
             {
@@ -63,13 +63,13 @@ namespace Portfolio_Builder.BusinessLogic
         {
             List<int> timeframes = GetTimeframes();
 
-            ObservableCollection<PerformanceCardModel> results = new ObservableCollection<PerformanceCardModel>();
+            ObservableCollection<PerformanceCardModel> results = new();
 
             foreach (int timeFrame in timeframes)
             {
                 DateTime dateTime = DateTime.Now;
                 TimeSpan timeSpan = TimeSpan.FromDays(timeFrame);
-                PerformanceCardModel performanceCardModel = new PerformanceCardModel(databaseManagement.FindMaxValue(assetTickerSymbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame),"$");
+                PerformanceCardModel performanceCardModel = new(databaseManagement.FindMaxValue(assetTickerSymbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame),"$");
                 results.Add(performanceCardModel);
             }
             return results;
@@ -79,35 +79,35 @@ namespace Portfolio_Builder.BusinessLogic
         {
             List<int> timeframes = GetTimeframes();
 
-            ObservableCollection<PerformanceCardModel> results = new ObservableCollection<PerformanceCardModel>();
+            ObservableCollection<PerformanceCardModel> results = new();
 
             foreach (int timeframe in timeframes)
             {
                 DateTime dateTime = DateTime.Now;
                 TimeSpan timeSpan = TimeSpan.FromDays(timeframe);
-                PerformanceCardModel performanceCardModel = new PerformanceCardModel(databaseManagement.FindMinValue(assetTickerSymbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeframe),"$");
+                PerformanceCardModel performanceCardModel = new(databaseManagement.FindMinValue(assetTickerSymbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeframe),"$");
                 results.Add(performanceCardModel);
             }
             return results;
         }
 
-        private string GetTimeframeToPerformanceCardCaption(int timeframe)
+        private static string GetTimeframeToPerformanceCardCaption(int timeframe)
         {
-            switch(timeframe)
+            return timeframe switch
             {
-                case 2: return "1 Tag";
-                case 7: return "1 Woche";
-                case 30: return "1 Monat";
-                case 90: return "3 Monate";
-                case 180: return "6 Monate";
-                case 360: return "1 Jahr";
-                case 1080: return "3 Jahre";
-                case 3600: return "10 Jahre";
-                default: return "";
-            }
+                2 => "1 Tag",
+                7 => "1 Woche",
+                30 => "1 Monat",
+                90 => "3 Monate",
+                180 => "6 Monate",
+                360 => "1 Jahr",
+                1080 => "3 Jahre",
+                3600 => "10 Jahre",
+                _ => ""
+            };
         }
 
-        private List<int> GetTimeframes()
+        private static List<int> GetTimeframes()
         {
             return new List<int> { 2, 7, 30, 90, 180, 360, 1080, 3600 };
         }

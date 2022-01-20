@@ -10,11 +10,11 @@ namespace Portfolio_Builder.BusinessLogic
 {
     public class DatabaseManagement
     {
-        private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
+        private readonly MySqlConnection connection;
+        private readonly string server;
+        private readonly string database;
+        private readonly string uid;
+        private readonly string password;
 
 
         public DatabaseManagement()
@@ -55,17 +55,17 @@ namespace Portfolio_Builder.BusinessLogic
 
         public Asset CreateAsset(string assetTickerSymbol)
         {
-            Asset asset = new Asset();
+            Asset asset = new();
             List<AssetDay> assetDays = CreateAssetDayList(assetTickerSymbol);
             if (OpenConnection())
             {
                 string sqlQueryText = $"Select symbol, name from Asset where symbol = '{assetTickerSymbol}'";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.Read())
                 {
-                    asset = new Asset(assetTickerSymbol, dataReader["Name"].ToString() ?? "", assetDays);
+                    asset = new Asset(assetTickerSymbol, dataReader["Name"].ToString() ?? "","","","", assetDays);
                 }
                 dataReader.Close();
 
@@ -76,13 +76,13 @@ namespace Portfolio_Builder.BusinessLogic
 
         private List<AssetDay> CreateAssetDayList(string assetTickerSymbol)
         {
-            List<AssetDay> assetDays = new List<AssetDay>();
-            AssetDay assetDay = new AssetDay();
+            List<AssetDay> assetDays = new();
+            AssetDay assetDay;
 
             if (OpenConnection())
             {
                 string sqlQueryText = $"Select Date, Opening_Price, Closing_Price, Daily_High, Daily_Low, Volume from Asset_Data where symbol = '{assetTickerSymbol}'";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
                 while (dataReader.Read())
@@ -109,8 +109,8 @@ namespace Portfolio_Builder.BusinessLogic
             double result = default;
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Closing_Price From Asset_Data where symbol = '{assetTickerSymbol}' and Date <= '{date.ToString("yyyy-MM-dd HH:mm:ss")}' Order By Date Desc Limit 1";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
+                string sqlQueryText = $"Select Closing_Price From Asset_Data where symbol = '{assetTickerSymbol}' and Date <= '{date:yyyy-MM-dd HH:mm:ss}' Order By Date Desc Limit 1";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.Read())
@@ -136,8 +136,8 @@ namespace Portfolio_Builder.BusinessLogic
             double result = default;
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Max(Daily_High) From Asset_Data where symbol = '{assetTickerSymbol}' and Date >= '{startingDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
+                string sqlQueryText = $"Select Max(Daily_High) From Asset_Data where symbol = '{assetTickerSymbol}' and Date >= '{startingDate:yyyy-MM-dd HH:mm:ss}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
                 if(dataReader.Read())
@@ -162,8 +162,8 @@ namespace Portfolio_Builder.BusinessLogic
             double result = default;
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Min(Daily_Low) From Asset_Data where symbol = '{assetTickerSymbol}' and Date >= '{startingDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlQueryText, connection);
+                string sqlQueryText = $"Select Min(Daily_Low) From Asset_Data where symbol = '{assetTickerSymbol}' and Date >= '{startingDate:yyyy-MM-dd HH:mm:ss}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
                 if (dataReader.Read())
@@ -183,12 +183,12 @@ namespace Portfolio_Builder.BusinessLogic
             }
             return result;
         }
-        public double ConvertToDouble(string value)
+        public static double ConvertToDouble(string value)
         {
             return Convert.ToDouble(value);
         }
 
-        public DateTime ConvertToDateTime(string value)
+        public static DateTime ConvertToDateTime(string value)
         {
             return Convert.ToDateTime(value);
         }

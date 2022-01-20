@@ -20,7 +20,7 @@ namespace Portfolio_Builder.Models
             set => SetProperty(ref _symbol, value);
         }
 
-        private int _symbolFontSize;
+        private readonly int _symbolFontSize;
         public int SymbolFontSize
         {
             get => _symbolFontSize;
@@ -33,7 +33,7 @@ namespace Portfolio_Builder.Models
             set => SetProperty(ref _name, value);
         }
 
-        private int _nameFontSize;
+        private readonly int _nameFontSize;
         public int NameFontSize
         {
             get => _nameFontSize;
@@ -46,13 +46,13 @@ namespace Portfolio_Builder.Models
             set => SetProperty(ref _currentPrice, value);
         }
 
-        private int _currentPriceFontSize;
+        private readonly int _currentPriceFontSize;
         public int CurrentPriceFontSize
         {
             get => _currentPriceFontSize;
         }
 
-        private string _currentPriceCaption;
+        private readonly string _currentPriceCaption;
         public string CurrentPriceCaption
         {
             get => _currentPriceCaption;

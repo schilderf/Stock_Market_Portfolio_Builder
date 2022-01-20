@@ -2,19 +2,13 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using Portfolio_Builder.BusinessLogic;
 using Portfolio_Builder.Models;
-using System;
-using System.Collections.Generic;
+using Portfolio_Builder.Views;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Portfolio_Builder.ViewModels
 {
     public class MainWindowViewModel : ObservableObject
     {
-        private CardFactory assetCardCreator = new CardFactory();
-
         private string _marketHeadline;
 
         public string MarketHeadline
@@ -52,13 +46,8 @@ namespace Portfolio_Builder.ViewModels
 
             _stockHeadline = "Einzelne Aktien";
             _stockCardCollection = new ObservableCollection<AssetCardModel>();
-            //AddAssetCard("AMZN");
-            //AddAssetCard("AAPL");
-            //AddAssetCard("GOOG");
-            //AddAssetCard("AMZN");
 
-
-            _addAssetCardCommand = new RelayCommand(() => AddAssetCard("GOOG"));
+            _addAssetCardCommand = new RelayCommand(() => OpenAssetScreener());
         }
 
         private RelayCommand _addAssetCardCommand;
@@ -68,9 +57,10 @@ namespace Portfolio_Builder.ViewModels
             set => SetProperty(ref _addAssetCardCommand, value);
         }
 
-        public void AddAssetCard(string assetTickerSymbol)
+        public static void OpenAssetScreener()
         {
-           StockCardCollection.Add(assetCardCreator.CreateAssetCard(assetTickerSymbol));
+            AssetScreenerView assetScreenerView = new();
+            assetScreenerView.ShowDialog();
         }
     }
 }
