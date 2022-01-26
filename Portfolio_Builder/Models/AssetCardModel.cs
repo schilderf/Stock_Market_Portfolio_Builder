@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LiveCharts;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using LiveCharts;
-using System.Collections.ObjectModel;
-using LiveCharts.Wpf;
 using Microsoft.Toolkit.Mvvm.Input;
+using System;
+using System.Collections.ObjectModel;
 
 namespace Portfolio_Builder.Models
 {
@@ -169,7 +164,7 @@ namespace Portfolio_Builder.Models
             _setTimeFrame10Y = new RelayCommand(() => SetTimeFrame(3650));
 
             _maxXChartValue = DateTime.Now.Ticks;
-            _minXChartValue = DateTime.Now.Subtract(new TimeSpan(365,0,0,0)).Ticks;
+            _minXChartValue = DateTime.Now.Subtract(new TimeSpan(365, 0, 0, 0)).Ticks;
             _separatorStep = TimeSpan.FromDays(90).Ticks;
             XFormatter = val => new DateTime((long)val).ToString("MMM yyyy");
             YFormatter = val => val.ToString("C");
@@ -191,7 +186,7 @@ namespace Portfolio_Builder.Models
             MinXChartValue = default;
 
             MaxXChartValue = DateTime.Now.Ticks;
-            MinXChartValue = DateTime.Now.Subtract(new TimeSpan(days,0,0,0)).Ticks;
+            MinXChartValue = DateTime.Now.Subtract(new TimeSpan(days, 0, 0, 0)).Ticks;
 
             if (days <= 180)
             {

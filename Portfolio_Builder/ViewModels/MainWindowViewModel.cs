@@ -9,6 +9,7 @@ namespace Portfolio_Builder.ViewModels
 {
     public class MainWindowViewModel : ObservableObject
     {
+        private readonly static CardFactory CardFactory = new();
         private string _marketHeadline;
 
         public string MarketHeadline
@@ -45,7 +46,9 @@ namespace Portfolio_Builder.ViewModels
             _marketCardCollection = new ObservableCollection<MarketCardModel>();
 
             _stockHeadline = "Einzelne Aktien";
-            _stockCardCollection = new ObservableCollection<AssetCardModel>();
+            _stockCardCollection = new();
+
+            _stockCardCollection.Add(CardFactory.CreateAssetCard("AMZ.F"));
 
             _addAssetCardCommand = new RelayCommand(() => OpenAssetScreener());
         }
