@@ -5,12 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Portfolio_Builder.Views"
         xmlns:viewmodel="clr-namespace:Portfolio_Builder.ViewModels" 
-        d:DataContext="{d:DesignInstance Type=viewmodel:AssetScreenerViewModel}"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewmodel:AssetScreenerViewModel}"
         Style="{DynamicResource CustomWindowStyle}"
         WindowStartupLocation="CenterScreen"
         Title="Asset Screener" Height="600" Width="1200">
+    <Window.DataContext>
+        <viewmodel:AssetScreenerViewModel />
+    </Window.DataContext>
     <Grid>
-        
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>-->
+        <ListBox Margin="10" ItemsSource="{Binding MarketScoreCollection}" FontSize="20">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Gain}" HorizontalAlignment="Center" Padding="10"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--<ListView ItemsSource="{Binding Test}" Margin="10" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Length}" Height="50" FontSize="25" Foreground="White" /> 
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
     </Grid>
 </Window>

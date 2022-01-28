@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
+using Portfolio_Builder.Models;
 
 namespace Portfolio_Builder.BusinessLogic
 {
@@ -182,6 +183,32 @@ namespace Portfolio_Builder.BusinessLogic
                 this.CloseConnection();
             }
             return result;
+        }
+
+        public ObservableCollection<MarketScoreModel> GetMarketScoreModelsByType(string MarketType)
+        {
+            ObservableCollection<MarketScoreModel> marketScores = new();
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select {MarketType} From {MarketType}";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    try
+                    {
+                        marketScores.Add(new(dataReader[MarketType].ToString() ?? "", 0.0));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return marketScores;
         }
         public static double ConvertToDouble(string value)
         {
