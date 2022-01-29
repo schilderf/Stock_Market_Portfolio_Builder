@@ -16,5 +16,10 @@ namespace Portfolio_Builder.BusinessLogic
         {
             return databaseManagement.GetMarketScoreModels();
         }
+
+        public ObservableCollection<AssetScoreModel> CreateAssetScoreModels(string type, string typeName)
+        {
+            return databaseManagement.GetAssetScoreModels(type, typeName);
+        }
     }
 }

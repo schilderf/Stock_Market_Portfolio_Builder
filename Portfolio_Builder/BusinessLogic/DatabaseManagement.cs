@@ -210,9 +210,35 @@ namespace Portfolio_Builder.BusinessLogic
             }
             return marketScores;
         }
+
+        public ObservableCollection<AssetScoreModel> GetAssetScoreModels(string type, string typeName)
+        {
+            ObservableCollection<AssetScoreModel> assetScores = new();
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Asset_Symbol, Category, Name From Asset_Score Join Asset On Asset_Score.Asset_Symbol = Asset.Symbol Where {type} = '{typeName}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    try
+                    {
+                        assetScores.Add(new(dataReader["Asset_Symbol"].ToString() ?? "", dataReader["Category"].ToString() ?? "", dataReader["Name"].ToString() ?? ""));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return assetScores;
+        }
         public static double ConvertToDouble(string value)
         {
-            return Convert.ToDouble(value);
+            return Math.Round(Convert.ToDouble(value), 2);
         }
 
         public static DateTime ConvertToDateTime(string value)

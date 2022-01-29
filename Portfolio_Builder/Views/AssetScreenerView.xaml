@@ -9,28 +9,44 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:AssetScreenerViewModel}"
         Style="{DynamicResource CustomWindowStyle}"
         WindowStartupLocation="CenterScreen"
-        Title="Asset Screener" Height="600" Width="1200">
+        Title="Asset Screener" Height="600" Width="1200"
+        FontSize="20">
     <Window.DataContext>
         <viewmodel:AssetScreenerViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Margin="10" ItemsSource="{Binding MarketScoreCollection}" FontSize="20">
+        <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding MarketScoreCollection}" SelectedItem="{Binding SelectedMarketScore, Mode=TwoWay}" Margin="4">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding Type}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Name}" Width ="500" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Gain}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding GainColor}"/>
-                        <TextBlock Text="{Binding Direction}" Width ="100" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding GainColor}"/>
+                        <TextBlock Text="{Binding Name}" Width ="325" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Gain}" Width ="75" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,10,0,10" Foreground="{Binding GainColor}"/>
+                        <TextBlock Text="{Binding Direction}" Width ="50" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0,10,10,10" Foreground="{Binding GainColor}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding AssetScoreCollection}" SelectedItem="{Binding SelectedAssetScore, Mode=OneWayToSource}" Margin="4">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding Symbol}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Name}" Width ="350" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Category}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding CategoryColor}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Grid.Column="0" Grid.Row="1" Name="AddMarketToFrontpage" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddAssetCardCommand}" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Zur Startseite hinzufügen 📄" Cursor="Hand"/>
+        <Button Grid.Column="1" Grid.Row="1" Name="AddAssetToFrontpage" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddAssetCardCommand}" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Zur Startseite hinzufügen 📄" Cursor="Hand"/>
     </Grid>
 </Window>

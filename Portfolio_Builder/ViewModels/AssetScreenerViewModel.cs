@@ -21,12 +21,35 @@ namespace Portfolio_Builder.ViewModels
             get => _marketScoreCollection;
             set => SetProperty(ref _marketScoreCollection, value);
         }
+        private MarketScoreModel? _selectedMarketScore;
+        public MarketScoreModel SelectedMarketScore
+        {
+            set 
+            {
+                SetProperty(ref _selectedMarketScore, value);
+
+                if (_selectedMarketScore != null)
+                    AssetScoreCollection = scoreFactory.CreateAssetScoreModels(_selectedMarketScore.Type, _selectedMarketScore.Name);
+            }
+        }
+
+        private ObservableCollection<AssetScoreModel> _assetScoreCollection;
+        public ObservableCollection<AssetScoreModel> AssetScoreCollection
+        {
+            get => _assetScoreCollection;
+            set => SetProperty(ref _assetScoreCollection, value);
+        }
+
+        private AssetScoreModel? _selectedAssetScore;
+        public AssetScoreModel SelectedAssetScore
+        {
+            set => SetProperty(ref _selectedAssetScore, value);
+        }
 
         public AssetScreenerViewModel()
         {
             _marketScoreCollection = scoreFactory.CreateMarketScoreModels();
-            _marketScoreCollection.Add(new MarketScoreModel("Test Sideways", -7.78, "Industry"));
-            _marketScoreCollection.Add(new MarketScoreModel("Test Downwards", -12.65, "Sector"));
+            _assetScoreCollection = new();
         }
     }
 }
