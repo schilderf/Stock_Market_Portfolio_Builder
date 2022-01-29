@@ -12,24 +12,9 @@ namespace Portfolio_Builder.BusinessLogic
     {
         private readonly DatabaseManagement databaseManagement = new();
 
-        public ObservableCollection<MarketScoreModel> CreateMarketScoreModelsByType(string MarketType)
+        public ObservableCollection<MarketScoreModel> CreateMarketScoreModels()
         {
-            return databaseManagement.GetMarketScoreModelsByType(MarketType);
-        }
-
-        public ObservableCollection<MarketScoreModel> CreateAllMarketScoreModels()
-        {
-            List<string> marketTypes = new() { "Industry", "Sector", "Country" };
-            ObservableCollection<MarketScoreModel> allMarketScores = new();
-            foreach (string marketType in marketTypes)
-            {
-                foreach (var item in allMarketScores.Concat(CreateMarketScoreModelsByType(marketType)))
-                {
-                    allMarketScores.Add(item);
-                }
-            }
-
-            return allMarketScores;
+            return databaseManagement.GetMarketScoreModels();
         }
     }
 }

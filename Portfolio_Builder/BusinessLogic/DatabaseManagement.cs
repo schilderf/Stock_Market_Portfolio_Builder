@@ -185,20 +185,20 @@ namespace Portfolio_Builder.BusinessLogic
             return result;
         }
 
-        public ObservableCollection<MarketScoreModel> GetMarketScoreModelsByType(string MarketType)
+        public ObservableCollection<MarketScoreModel> GetMarketScoreModels()
         {
             ObservableCollection<MarketScoreModel> marketScores = new();
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select {MarketType} From {MarketType}";
+                string sqlQueryText = $"Select Type, Market_Score.Name, Value_Change From Market_Score Join Market On Market_Score.Name = Market.Name Order By Type";
                 MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
-                if (dataReader.Read())
+                while (dataReader.Read())
                 {
                     try
                     {
-                        marketScores.Add(new(dataReader[MarketType].ToString() ?? "", 0.0));
+                        marketScores.Add(new(dataReader["Name"].ToString() ?? "", ConvertToDouble(dataReader["Value_Change"].ToString() ?? "0"), dataReader["Type"].ToString() ?? ""));
                     }
                     catch (Exception)
                     {

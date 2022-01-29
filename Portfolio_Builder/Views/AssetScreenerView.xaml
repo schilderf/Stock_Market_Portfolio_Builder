@@ -14,28 +14,23 @@
         <viewmodel:AssetScreenerViewModel />
     </Window.DataContext>
     <Grid>
-        <!--<Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>-->
+        </Grid.ColumnDefinitions>
         <ListBox Margin="10" ItemsSource="{Binding MarketScoreCollection}" FontSize="20">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Gain}" HorizontalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Type}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Name}" Width ="500" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Gain}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding GainColor}"/>
+                        <TextBlock Text="{Binding Direction}" Width ="100" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding GainColor}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!--<ListView ItemsSource="{Binding Test}" Margin="10" >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Length}" Height="50" FontSize="25" Foreground="White" /> 
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
     </Grid>
 </Window>

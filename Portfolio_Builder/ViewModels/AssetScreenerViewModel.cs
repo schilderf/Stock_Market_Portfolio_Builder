@@ -22,16 +22,11 @@ namespace Portfolio_Builder.ViewModels
             set => SetProperty(ref _marketScoreCollection, value);
         }
 
-        private ObservableCollection<string> test = new();
-        public ObservableCollection<string> Test
-        {
-            get => test;
-            set => SetProperty(ref test, value);
-        }
-
         public AssetScreenerViewModel()
         {
-            _marketScoreCollection = scoreFactory.CreateMarketScoreModelsByType("Industry");
+            _marketScoreCollection = scoreFactory.CreateMarketScoreModels();
+            _marketScoreCollection.Add(new MarketScoreModel("Test Sideways", -7.78, "Industry"));
+            _marketScoreCollection.Add(new MarketScoreModel("Test Downwards", -12.65, "Sector"));
         }
     }
 }

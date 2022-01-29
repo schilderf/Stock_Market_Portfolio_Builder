@@ -44,7 +44,7 @@
     <SolidColorBrush x:Key="ControlPrimaryDisabledBorderBrush"          Color="#FF3C78C8"/>
     <SolidColorBrush x:Key="ControlPrimaryMouseOverBackground"          Color="DarkSlateBlue"/>
     <SolidColorBrush x:Key="ControlPrimaryMouseOverBorderBrush"         Color="MediumSlateBlue"/>
-    <SolidColorBrush x:Key="ControlPrimarySelectedBackground"           Color="#FF1482DC"/>
+    <SolidColorBrush x:Key="ControlPrimarySelectedBackground"           Color="#3a3380"/>
     <SolidColorBrush x:Key="ControlPrimarySelectedBorderBrush"          Color="#FF28A0F0"/>
     <SolidColorBrush x:Key="ControlPrimarySelectedMouseOverBackground"  Color="#FF1484D1"/>
     <SolidColorBrush x:Key="ControlPrimarySelectedMouseOverBorderBrush" Color="#FF1491E8"/>
