@@ -1,12 +1,13 @@
 ﻿using LiveCharts;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System;
 using System.Collections.ObjectModel;
 
 namespace Portfolio_Builder.Models
 {
-    public class AssetCardModel : ObservableObject
+    public class AssetCardModel : ObservableRecipient
     {
         private string _symbol;
         public string Symbol
@@ -65,6 +66,12 @@ namespace Portfolio_Builder.Models
         {
             get => _priceChanges;
             set => SetProperty(ref _priceChanges, value);
+        }
+
+        private readonly RelayCommand _deleteCardCommand;
+        public RelayCommand DeleteCardCommand
+        {
+            get => _deleteCardCommand;
         }
 
         private ObservableCollection<PerformanceCardModel> _maxValues;
@@ -156,6 +163,8 @@ namespace Portfolio_Builder.Models
             _currentPriceFontSize = 30;
             _currentPriceCaption = "Aktueller Preis:";
 
+            _deleteCardCommand = new RelayCommand(DeleteCard);
+
             _setTimeFrame3M = new RelayCommand(() => SetTimeFrame(90));
             _setTimeFrame6M = new RelayCommand(() => SetTimeFrame(180));
             _setTimeFrame1Y = new RelayCommand(() => SetTimeFrame(365));
@@ -217,6 +226,11 @@ namespace Portfolio_Builder.Models
                 return;
             }
 
+        }
+
+        private void DeleteCard()
+        {
+            Messenger.Send(new WatchlistDeleteAssetMessage(this));
         }
     }
 }

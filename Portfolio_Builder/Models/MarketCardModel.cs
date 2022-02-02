@@ -40,6 +40,12 @@ namespace Portfolio_Builder.Models
             set => SetProperty(ref _changes, value);
         }
 
+        private readonly RelayCommand _deleteCardCommand;
+        public RelayCommand DeleteCardCommand
+        {
+            get => _deleteCardCommand;
+        }
+
         private ObservableCollection<PerformanceCardModel> _maxValues;
         public ObservableCollection<PerformanceCardModel> MaxValues
         {

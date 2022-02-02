@@ -1,4 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using Portfolio_Builder.BusinessLogic;
 using Portfolio_Builder.Models;
 using Portfolio_Builder.Views;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Portfolio_Builder.ViewModels
 {
-    public class AssetScreenerViewModel : ObservableObject
+    public class AssetScreenerViewModel : ObservableRecipient
     {
         private static readonly ScoreFactory scoreFactory = new();
 
@@ -43,13 +45,36 @@ namespace Portfolio_Builder.ViewModels
         private AssetScoreModel? _selectedAssetScore;
         public AssetScoreModel SelectedAssetScore
         {
+            get => _selectedAssetScore ?? new();
             set => SetProperty(ref _selectedAssetScore, value);
+        }
+
+        private RelayCommand _addAssetToWatchlistCommand;
+        public RelayCommand AddAssetToWatchlistCommand
+        {
+            get => _addAssetToWatchlistCommand;
+            set => SetProperty(ref _addAssetToWatchlistCommand, value);
+        }
+
+        private RelayCommand _addMarketToWatchlistCommand;
+        public RelayCommand AddMarketToWatchlistCommand
+        {
+            get => _addMarketToWatchlistCommand;
+            set => SetProperty(ref _addMarketToWatchlistCommand, value);
         }
 
         public AssetScreenerViewModel()
         {
             _marketScoreCollection = scoreFactory.CreateMarketScoreModels();
             _assetScoreCollection = new();
+
+            _addAssetToWatchlistCommand = new(() => AddAssetToWatchlist());
+            _addMarketToWatchlistCommand = new(() => AddAssetToWatchlist());
+        }
+
+        private void AddAssetToWatchlist()
+        {
+            Messenger.Send(new WatchlistAddAssetMessage(SelectedAssetScore.Symbol));
         }
     }
 }

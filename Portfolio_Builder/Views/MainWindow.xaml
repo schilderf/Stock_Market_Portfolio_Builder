@@ -22,7 +22,7 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Name="Search" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddAssetCardCommand}" Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Basiswert suchen 🔍" Cursor="Hand"/>
+            <Button Name="Search" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding OpenAssetScreenerCommand}" Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Basiswert suchen 🔍" Cursor="Hand"/>
             <ScrollViewer Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -105,6 +105,7 @@
                                                 <RowDefinition Height="1.4*"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Grid.Row="0" FontSize="{Binding SymbolFontSize}" Text="{Binding Symbol}" />
+                                            <Button Grid.Row="0" Style="{StaticResource RoundedCorners}" Command="{Binding DeleteCardCommand}" Content="🗑" Width="40" Height="40" FontSize="20" HorizontalAlignment="Right"/>
                                             <TextBlock Grid.Row="1" FontSize="{Binding NameFontSize}" Text="{Binding Name}" />
                                             <lvc:CartesianChart Grid.Row="2" Series="{Binding PriceChart}" Zoom="Xy">
                                                 <lvc:CartesianChart.DataTooltip>
@@ -132,7 +133,7 @@
                                                 <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame1Y}">1Y</Button>
                                                 <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3Y}">3Y</Button>
                                                 <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame5Y}">5Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame10Y>}">Max</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame10Y}">Max</Button>
                                             </StackPanel>
                                             <Grid Grid.Row="4">
                                                 <Grid.RowDefinitions>

@@ -11,6 +11,15 @@ namespace Portfolio_Builder.BusinessLogic
         private readonly DatabaseManagement databaseManagement = new();
         private readonly ChartFactory chartFactory = new();
 
+        public ObservableCollection<AssetCardModel> CreateWatchlistAssetCardCollection()
+        {
+            ObservableCollection<AssetCardModel> assetCardModels = new();
+            foreach (string assetSymbol in databaseManagement.GetItemsOnWatchlist("Asset"))
+            {
+                assetCardModels.Add(CreateAssetCard(assetSymbol));
+            }
+            return assetCardModels;
+        }
         public AssetCardModel CreateAssetCard(string assetTickerSymbol)
         {
             Asset asset = databaseManagement.CreateAsset(assetTickerSymbol);

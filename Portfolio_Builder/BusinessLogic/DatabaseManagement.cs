@@ -236,6 +236,59 @@ namespace Portfolio_Builder.BusinessLogic
             }
             return assetScores;
         }
+
+        public List<string> GetItemsOnWatchlist(string type)
+        {
+            List<string> assetsOnWatchlist = new();
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Name From Watchlist Where Type = '{type}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    try
+                    {
+                        assetsOnWatchlist.Add(dataReader["Name"].ToString() ?? "");
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return assetsOnWatchlist;
+        }
+        public void AddItemToWatchlist(string name,string type)
+        {
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Insert Into Watchlist (Name, Type) Values ('{name}', '{type}')";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                try
+                {
+                    sqlCommand.ExecuteNonQuery();
+                }
+                catch
+                { 
+                }
+                this.CloseConnection();
+            }
+        }
+        public void DeleteItemFromWatchlist(string name, string type)
+        {
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Delete From Watchlist Where Name = '{name}' and Type = '{type}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                sqlCommand.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
         public static double ConvertToDouble(string value)
         {
             return Math.Round(Convert.ToDouble(value), 2);

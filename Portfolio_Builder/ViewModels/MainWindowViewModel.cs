@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using Portfolio_Builder.BusinessLogic;
 using Portfolio_Builder.Models;
 using Portfolio_Builder.Views;
@@ -7,9 +8,9 @@ using System.Collections.ObjectModel;
 
 namespace Portfolio_Builder.ViewModels
 {
-    public class MainWindowViewModel : ObservableObject
+    public class MainWindowViewModel : ObservableRecipient
     {
-        private readonly CardFactory cardFactory = new();
+        private readonly WatchlistManagement watchlist = new();
         private string _marketHeadline;
 
         public string MarketHeadline
@@ -40,30 +41,40 @@ namespace Portfolio_Builder.ViewModels
             set => SetProperty(ref _stockCardCollection, value);
         }
 
-        public MainWindowViewModel ()
+        public MainWindowViewModel()
         {
             _marketHeadline = "Globale Märkte";
-            _marketCardCollection = new();
+            _marketCardCollection = watchlist.MarketCardsOnWatchlist;
 
             _stockHeadline = "Einzelne Aktien";
-            _stockCardCollection = new();
+            _stockCardCollection = watchlist.AssetCardsOnWatchlist;
 
-            _stockCardCollection.Add(cardFactory.CreateAssetCard("AMZN"));
+            _openAssetScreenerCommand = new RelayCommand(() => OpenAssetScreener());
 
-            _addAssetCardCommand = new RelayCommand(() => OpenAssetScreener());
+            Messenger.Register<WatchlistAddAssetMessage>(this, (r, m) =>
+            {
+                watchlist.AddAssetToWatchlist(m.Value);
+                StockCardCollection = watchlist.AssetCardsOnWatchlist;
+            });
+
+            Messenger.Register<WatchlistDeleteAssetMessage>(this, (r, m) =>
+            {
+                watchlist.DeleteAssetFromWatchlist(m.Value);
+                StockCardCollection= watchlist.AssetCardsOnWatchlist;
+            });
         }
 
-        private RelayCommand _addAssetCardCommand;
-        public RelayCommand AddAssetCardCommand
+        private RelayCommand _openAssetScreenerCommand;
+        public RelayCommand OpenAssetScreenerCommand
         {
-            get => _addAssetCardCommand;
-            set => SetProperty(ref _addAssetCardCommand, value);
+            get => _openAssetScreenerCommand;
+            set => SetProperty(ref _openAssetScreenerCommand, value);
         }
 
         public static void OpenAssetScreener()
         {
             AssetScreenerView assetScreenerView = new();
-            assetScreenerView.Show();
+            assetScreenerView.ShowDialog();
         }
     }
 }
