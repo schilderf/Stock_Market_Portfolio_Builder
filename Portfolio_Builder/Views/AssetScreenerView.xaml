@@ -46,7 +46,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Column="0" Grid.Row="1" Name="AddMarketToFrontpage" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddAssetToWatchlistCommand}" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Zur Startseite hinzufügen 📄" Cursor="Hand"/>
-        <Button Grid.Column="1" Grid.Row="1" Name="AddAssetToFrontpage"  Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddAssetToWatchlistCommand}" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Zur Startseite hinzufügen 📄" Cursor="Hand"/>
+        <Button Grid.Column="0" Grid.Row="1" Name="AddMarketToFrontpage" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddMarketToWatchlistCommand}" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Zur Startseite hinzufügen 📄" Cursor="Hand"/>
+        <Button Grid.Column="1" Grid.Row="1" Name="AddAssetToFrontpage"  Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding AddAssetToWatchlistCommand}"  HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Zur Startseite hinzufügen 📄" Cursor="Hand"/>
     </Grid>
 </Window>

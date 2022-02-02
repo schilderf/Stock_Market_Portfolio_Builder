@@ -102,7 +102,73 @@ namespace Portfolio_Builder.BusinessLogic
                 this.CloseConnection();
             }
             return assetDays;
+        }
 
+        public Market CreateMarket(string marketName)
+        {
+            string marketType = String.Empty;
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Type from Market where name = '{marketName}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    marketType = dataReader["Type"].ToString() ?? "";
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return new(marketName, marketType, CreateMarketDayList(marketName), CreateAssetsByMarket(marketName, marketType));
+        }
+
+        private List<MarketDay> CreateMarketDayList(string marketName)
+        {
+            List<MarketDay> marketDays = new();
+            MarketDay marketDay;
+
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Date, Value from Market_Score_Details where Name = '{marketName}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    marketDay = new MarketDay(ConvertToDateTime(dataReader["Date"].ToString() ?? ""),
+                                              ConvertToDouble(dataReader["Value"].ToString() ?? ""));
+
+                    marketDays.Add(marketDay);
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return marketDays;
+        }
+
+        private ObservableCollection<string> CreateAssetsByMarket(string marketName, string marketType)
+        {
+            ObservableCollection<string> assetNames = new();
+
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Symbol from Asset where {marketType} = '{marketName}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    assetNames.Add(dataReader["Symbol"].ToString() ?? "");
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+
+            return assetNames;
         }
 
         public double GetSingleClosingPrice(string assetTickerSymbol, DateTime date)
@@ -132,6 +198,33 @@ namespace Portfolio_Builder.BusinessLogic
             return Math.Round(result,2);
         }
 
+        public double GetCurrentPerformance(string marketName, DateTime date)
+        {
+            double result = default;
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Value From Market_Score_Details where Name = '{marketName}' and Date <= '{date:yyyy-MM-dd HH:mm:ss}' Order By Date Desc Limit 1";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    try
+                    {
+                        result = ConvertToDouble(dataReader["Value"].ToString() ?? "");
+                    }
+                    catch (Exception)
+                    {
+                        result = Double.NaN;
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return Math.Round(result, 2);
+        }
+
         public double FindMaxValue(string assetTickerSymbol, DateTime startingDate)
         {
             double result = default;
@@ -158,6 +251,33 @@ namespace Portfolio_Builder.BusinessLogic
             }
         return result;
         }
+
+        public double FindMaxMarketValue(string name, DateTime startingDate)
+        {
+            double result = default;
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Max(Value) From Market_Score_Details where Name = '{name}' and Date >= '{startingDate:yyyy-MM-dd HH:mm:ss}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    try
+                    {
+                        result = ConvertToDouble(dataReader["Max(Value)"].ToString() ?? "");
+                    }
+                    catch (Exception)
+                    {
+                        result = Double.NaN;
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return result;
+        }
         public double FindMinValue(string assetTickerSymbol, DateTime startingDate)
         {
             double result = default;
@@ -172,6 +292,33 @@ namespace Portfolio_Builder.BusinessLogic
                     try
                     {
                         result = ConvertToDouble(dataReader["Min(Daily_Low)"].ToString() ?? "");
+                    }
+                    catch (Exception)
+                    {
+                        result = Double.NaN;
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return result;
+        }
+
+        public double FindMinMarketValue(string name, DateTime startingDate)
+        {
+            double result = default;
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Min(Value) From Market_Score_Details where Name = '{name}' and Date >= '{startingDate:yyyy-MM-dd HH:mm:ss}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    try
+                    {
+                        result = ConvertToDouble(dataReader["Min(Value)"].ToString() ?? "");
                     }
                     catch (Exception)
                     {

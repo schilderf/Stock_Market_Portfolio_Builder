@@ -26,6 +26,7 @@ namespace Portfolio_Builder.ViewModels
         private MarketScoreModel? _selectedMarketScore;
         public MarketScoreModel SelectedMarketScore
         {
+            get => _selectedMarketScore ?? new();
             set 
             {
                 SetProperty(ref _selectedMarketScore, value);
@@ -69,12 +70,17 @@ namespace Portfolio_Builder.ViewModels
             _assetScoreCollection = new();
 
             _addAssetToWatchlistCommand = new(() => AddAssetToWatchlist());
-            _addMarketToWatchlistCommand = new(() => AddAssetToWatchlist());
+            _addMarketToWatchlistCommand = new(() => AddMarketToWatchlist());
         }
 
         private void AddAssetToWatchlist()
         {
             Messenger.Send(new WatchlistAddAssetMessage(SelectedAssetScore.Symbol));
+        }
+
+        private void AddMarketToWatchlist()
+        {
+            Messenger.Send(new WatchlistAddMarketMessage(SelectedMarketScore.Name));
         }
     }
 }

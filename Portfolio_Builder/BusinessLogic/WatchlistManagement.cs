@@ -31,7 +31,7 @@ namespace Portfolio_Builder.BusinessLogic
         public WatchlistManagement()
         {
             _assetCardsOnWatchlist = cardFactory.CreateWatchlistAssetCardCollection();
-            _marketCardsOnWatchlist = new();
+            _marketCardsOnWatchlist = cardFactory.CreateWatchlistMarketCardCollection();
         }
 
         public void AddAssetToWatchlist(string name)
@@ -58,9 +58,30 @@ namespace Portfolio_Builder.BusinessLogic
 
             }
         }
-        public void AddMarketToWatchlist()
+        public void AddMarketToWatchlist(string name)
         {
+            databaseManagement.AddItemToWatchlist(name, "Market");
+            try
+            {
+                MarketCardsOnWatchlist.Add(cardFactory.CreateMarketCard(name));
+            }
+            catch
+            {
 
+            }
+        }
+
+        public void DeleteMarketFromWatchlist(MarketCardModel market)
+        {
+            databaseManagement.DeleteItemFromWatchlist(market.Name, "Market");
+            try
+            {
+                MarketCardsOnWatchlist.Remove(market);
+            }
+            catch
+            {
+
+            }
         }
     }
 }

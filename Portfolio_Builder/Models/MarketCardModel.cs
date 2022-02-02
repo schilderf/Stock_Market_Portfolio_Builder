@@ -1,6 +1,9 @@
 ﻿using LiveCharts;
+using LiveCharts.Wpf;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Toolkit.Mvvm.Messaging;
+using Portfolio_Builder.BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,19 +13,20 @@ using System.Threading.Tasks;
 
 namespace Portfolio_Builder.Models
 {
-    public class MarketCardModel : ObservableObject
+    public class MarketCardModel : ObservableRecipient
     {
-        private string _symbol;
-        public string Symbol
+        private readonly DatabaseManagement databaseManagement = new();
+        private string _name;
+        public string Name
         {
-            get => _symbol;
-            set => SetProperty(ref _symbol, value);
+            get => _name;
+            set => SetProperty(ref _name, value);
         }
 
-        private readonly int _symbolFontSize;
-        public int SymbolFontSize
+        private readonly int _nameFontSize;
+        public int NameFontSize
         {
-            get => _symbolFontSize;
+            get => _nameFontSize;
         }
 
         private SeriesCollection _chart;
@@ -30,6 +34,51 @@ namespace Portfolio_Builder.Models
         {
             get => _chart;
             set => SetProperty(ref _chart, value);
+        }
+
+        private string _currentValue;
+        public string CurrentValue
+        {
+            get => _currentValue;
+            set => SetProperty(ref _currentValue, value);
+        }
+
+        private readonly int _currentValueFontSize;
+        public int CurrentValueFontSize
+        {
+            get => _currentValueFontSize;
+        }
+
+        private readonly string _currentValueCaption;
+        public string CurrentValueCaption
+        {
+            get => _currentValueCaption;
+        }
+
+        private ObservableCollection<string> _assets;
+        public ObservableCollection<string> Assets
+        {
+            get => _assets;
+            set => SetProperty(ref _assets, value);
+        }
+
+        private string _selectedAsset;
+        public string SelectedAsset
+        {
+            get => _selectedAsset;
+            set
+            {
+                SetProperty(ref _selectedAsset, value);
+                ChartFactory.RemoveAssetChart(PastSelectedAsset, Chart);
+                PastSelectedAsset = ChartFactory.AddAssetChart(databaseManagement.CreateAsset(_selectedAsset), Chart);
+            }
+        }
+
+        private LineSeries _pastSelectedAsset;
+        public LineSeries PastSelectedAsset
+        {
+            get => _pastSelectedAsset;
+            set => SetProperty(ref _pastSelectedAsset, value);
         }
 
 
@@ -83,6 +132,19 @@ namespace Portfolio_Builder.Models
             set => SetProperty(ref _minXChartValue, value);
         }
 
+        private int _cardWidth;
+        public int CardWidth
+        {
+            get => _cardWidth;
+            set => SetProperty(ref _cardWidth, value);
+        }
+
+        private readonly RelayCommand _switchCardWidth;
+        public RelayCommand SwitchCardWidth
+        {
+            get => _switchCardWidth;
+        }
+
         private readonly RelayCommand _setTimeFrame3M;
         public RelayCommand SetTimeFrame3M
         {
@@ -121,12 +183,21 @@ namespace Portfolio_Builder.Models
 
         public MarketCardModel()
         {
-            _symbol = "";
-            _symbolFontSize = 25;
+            _name = "";
+            _nameFontSize = 30;
+            _currentValue = "";
+            _currentValueFontSize = 35;
+            _currentValueCaption = "Aktueller Wert:";
+            _cardWidth = 500;
+            _switchCardWidth = new RelayCommand(() => ChangeCardWidth());
             _chart = new SeriesCollection();
             _changes = new ObservableCollection<PerformanceCardModel>();
             _maxValues = new ObservableCollection<PerformanceCardModel>();
             _minValues = new ObservableCollection<PerformanceCardModel>();
+            _assets = new();
+            _selectedAsset = String.Empty;
+            _pastSelectedAsset = new();
+            _deleteCardCommand = new RelayCommand(DeleteCard);
 
             _setTimeFrame3M = new RelayCommand(() => SetTimeFrame(90));
             _setTimeFrame6M = new RelayCommand(() => SetTimeFrame(180));
@@ -139,7 +210,7 @@ namespace Portfolio_Builder.Models
             _minXChartValue = DateTime.Now.Subtract(new TimeSpan(365, 0, 0, 0)).Ticks;
             _separatorStep = TimeSpan.FromDays(90).Ticks;
             XFormatter = val => new DateTime((long)val).ToString("MMM yyyy");
-            YFormatter = val => val.ToString("C");
+            YFormatter = val => val.ToString();
         }
 
 
@@ -179,6 +250,20 @@ namespace Portfolio_Builder.Models
 
                 return;
             }
+
+        }
+
+        private void DeleteCard()
+        {
+            Messenger.Send(new WatchlistDeleteMarketMessage(this));
+        }
+
+        private void ChangeCardWidth()
+        {
+            if (CardWidth == 500)
+                CardWidth = 1100;
+            else
+                CardWidth = 500;
 
         }
     }

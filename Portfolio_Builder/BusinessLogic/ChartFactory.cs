@@ -14,15 +14,15 @@ namespace Portfolio_Builder.BusinessLogic
 {
     public class ChartFactory
     {
-        public SeriesCollection InitializeAssetChart(Asset asset)
+        public static SeriesCollection InitializeAssetChart(Asset asset)
         {
-            ChartValues<DateTimePoint> chartValues = new ChartValues<DateTimePoint>();
+            ChartValues<DateTimePoint> chartValues = new();
             foreach (AssetDay assetDay in asset.MarketDays)
             {
                 chartValues.Add(new DateTimePoint(assetDay.Date, assetDay.ClosingPrice));
             }
 
-            SeriesCollection seriesCollection = new SeriesCollection()
+            SeriesCollection seriesCollection = new()
             {
                 new LineSeries
                 {
@@ -36,9 +36,54 @@ namespace Portfolio_Builder.BusinessLogic
             return seriesCollection;
         }
 
-        private LinearGradientBrush GetChartFill()
+        public static SeriesCollection InitializeMarketChart(Market market)
         {
-            LinearGradientBrush gradientBrush = new LinearGradientBrush
+            ChartValues<DateTimePoint> chartValues = new();
+            foreach (MarketDay marketDay in market.Days)
+            {
+                chartValues.Add(new DateTimePoint(marketDay.Date, marketDay.Value));
+            }
+
+            SeriesCollection seriesCollection = new()
+            {
+                new LineSeries
+                {
+                    Title = "ClosingPrices",
+                    Values = chartValues,
+                    PointGeometry = null
+                }
+            };
+            
+            return seriesCollection;
+        }
+
+        public static LineSeries AddAssetChart(Asset asset, SeriesCollection seriesCollection)
+        {
+            ChartValues<DateTimePoint> chartValues = new();
+            foreach (AssetDay assetDay in asset.MarketDays)
+            {
+                chartValues.Add(new DateTimePoint(assetDay.Date, assetDay.ClosingPrice));
+            }
+
+            LineSeries series = new()
+            {
+                Title = "ClosingPrices",
+                Values = chartValues,
+                PointGeometry = null
+            };
+
+            seriesCollection.Add(series);
+            return series;
+        }
+
+        public static void RemoveAssetChart(LineSeries series, SeriesCollection seriesCollection)
+        {
+            seriesCollection.Remove(series);
+        }
+
+        private static LinearGradientBrush GetChartFill()
+        {
+            LinearGradientBrush gradientBrush = new()
             {
                 StartPoint = new Point(0, 0),
                 EndPoint = new Point(0, 1)

@@ -62,6 +62,18 @@ namespace Portfolio_Builder.ViewModels
                 watchlist.DeleteAssetFromWatchlist(m.Value);
                 StockCardCollection= watchlist.AssetCardsOnWatchlist;
             });
+
+            Messenger.Register<WatchlistAddMarketMessage>(this, (r, m) =>
+            {
+                watchlist.AddMarketToWatchlist(m.Value);
+                MarketCardCollection = watchlist.MarketCardsOnWatchlist;
+            });
+
+            Messenger.Register<WatchlistDeleteMarketMessage>(this, (r, m) =>
+            {
+                watchlist.DeleteMarketFromWatchlist(m.Value);
+                MarketCardCollection = watchlist.MarketCardsOnWatchlist;
+            });
         }
 
         private RelayCommand _openAssetScreenerCommand;
