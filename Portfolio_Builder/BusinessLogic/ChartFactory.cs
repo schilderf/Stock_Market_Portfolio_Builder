@@ -27,9 +27,12 @@ namespace Portfolio_Builder.BusinessLogic
                 new LineSeries
                 {
                     Title = "ClosingPrices",
-                    Fill = GetChartFill(),
+                    Fill = GetChartFill("Base"),
                     Values = chartValues,
-                    PointGeometry = null
+                    PointGeometry = null,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Stroke = Brushes.CornflowerBlue
                 }
             };
 
@@ -48,9 +51,13 @@ namespace Portfolio_Builder.BusinessLogic
             {
                 new LineSeries
                 {
-                    Title = "ClosingPrices",
+                    Title = "Values",
+                    Fill = GetChartFill("Base"),
                     Values = chartValues,
-                    PointGeometry = null
+                    PointGeometry = null,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Stroke = Brushes.CornflowerBlue
                 }
             };
             
@@ -68,8 +75,12 @@ namespace Portfolio_Builder.BusinessLogic
             LineSeries series = new()
             {
                 Title = "ClosingPrices",
+                Fill = GetChartFill("Additional"),
                 Values = chartValues,
-                PointGeometry = null
+                PointGeometry = null,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Stroke = Brushes.LightSteelBlue
             };
 
             seriesCollection.Add(series);
@@ -81,15 +92,23 @@ namespace Portfolio_Builder.BusinessLogic
             seriesCollection.Remove(series);
         }
 
-        private static LinearGradientBrush GetChartFill()
+        private static LinearGradientBrush GetChartFill(string type)
         {
             LinearGradientBrush gradientBrush = new()
             {
                 StartPoint = new Point(0, 0),
                 EndPoint = new Point(0, 1)
             };
-            gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(5, 0, 100), 0));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Transparent, 1));
+            if (type == "Base")
+            {
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(5, 0, 100), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Colors.Transparent, 1));
+            }
+            else
+            {
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(20, 41, 69), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Colors.Transparent, 1));
+            }
 
             return gradientBrush;
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Portfolio_Builder.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,8 +28,8 @@ namespace Portfolio_Builder.BusinessLogic
             get => _days;
         }
 
-        private readonly ObservableCollection<string> _assets;
-        public ObservableCollection<string> Assets
+        private readonly ObservableCollection<AssetScoreModel> _assets;
+        public ObservableCollection<AssetScoreModel> Assets
         {
             get => _assets;
         }
@@ -38,10 +39,10 @@ namespace Portfolio_Builder.BusinessLogic
             _name = String.Empty;
             _type = String.Empty;
             _days = new List<MarketDay>();
-            _assets = new ObservableCollection<string>();
+            _assets = new ObservableCollection<AssetScoreModel>();
         }
 
-        public Market(string name, string type, List<MarketDay> days, ObservableCollection<string> assets)
+        public Market(string name, string type, List<MarketDay> days, ObservableCollection<AssetScoreModel> assets)
         {
             _name = name;
             _type = type;

@@ -121,7 +121,7 @@ namespace Portfolio_Builder.BusinessLogic
 
                 this.CloseConnection();
             }
-            return new(marketName, marketType, CreateMarketDayList(marketName), CreateAssetsByMarket(marketName, marketType));
+            return new(marketName, marketType, CreateMarketDayList(marketName), GetAssetScoreModels(marketType,marketName));
         }
 
         private List<MarketDay> CreateMarketDayList(string marketName)
@@ -149,26 +149,48 @@ namespace Portfolio_Builder.BusinessLogic
             return marketDays;
         }
 
-        private ObservableCollection<string> CreateAssetsByMarket(string marketName, string marketType)
+        public Asset CreateAssetComparableToMarket(string assetTickerSymbol)
         {
-            ObservableCollection<string> assetNames = new();
-
+            Asset asset = new();
+            List<AssetDay> assetDays = CreateAssetDayListComparableToMarket(assetTickerSymbol);
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Symbol from Asset where {marketType} = '{marketName}'";
+                string sqlQueryText = $"Select symbol, name from Asset where symbol = '{assetTickerSymbol}'";
                 MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
-                while (dataReader.Read())
+                if (dataReader.Read())
                 {
-                    assetNames.Add(dataReader["Symbol"].ToString() ?? "");
+                    asset = new Asset(assetTickerSymbol, dataReader["Name"].ToString() ?? "", "", "", "", assetDays);
                 }
                 dataReader.Close();
 
                 this.CloseConnection();
             }
+            return asset;
+        }
 
-            return assetNames;
+        private List<AssetDay> CreateAssetDayListComparableToMarket(string assetTickerSymbol)
+        {
+            List<AssetDay> assetDays = new();
+            AssetDay assetDay;
+
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Date, Value from Market_Comparables where symbol = '{assetTickerSymbol}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    assetDay = new AssetDay(ConvertToDateTime(dataReader["Date"].ToString() ?? ""), 0,ConvertToDouble(dataReader["Value"].ToString() ?? ""), 0, 0, 0);
+                    assetDays.Add(assetDay);
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return assetDays;
         }
 
         public double GetSingleClosingPrice(string assetTickerSymbol, DateTime date)

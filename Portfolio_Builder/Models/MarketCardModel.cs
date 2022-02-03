@@ -55,22 +55,22 @@ namespace Portfolio_Builder.Models
             get => _currentValueCaption;
         }
 
-        private ObservableCollection<string> _assets;
-        public ObservableCollection<string> Assets
+        private ObservableCollection<AssetScoreModel> _assets;
+        public ObservableCollection<AssetScoreModel> Assets
         {
             get => _assets;
             set => SetProperty(ref _assets, value);
         }
 
-        private string _selectedAsset;
-        public string SelectedAsset
+        private AssetScoreModel _selectedAsset;
+        public AssetScoreModel SelectedAsset
         {
             get => _selectedAsset;
             set
             {
                 SetProperty(ref _selectedAsset, value);
                 ChartFactory.RemoveAssetChart(PastSelectedAsset, Chart);
-                PastSelectedAsset = ChartFactory.AddAssetChart(databaseManagement.CreateAsset(_selectedAsset), Chart);
+                PastSelectedAsset = ChartFactory.AddAssetChart(databaseManagement.CreateAssetComparableToMarket(_selectedAsset.Symbol), Chart);
             }
         }
 
@@ -195,7 +195,7 @@ namespace Portfolio_Builder.Models
             _maxValues = new ObservableCollection<PerformanceCardModel>();
             _minValues = new ObservableCollection<PerformanceCardModel>();
             _assets = new();
-            _selectedAsset = String.Empty;
+            _selectedAsset = new();
             _pastSelectedAsset = new();
             _deleteCardCommand = new RelayCommand(DeleteCard);
 
