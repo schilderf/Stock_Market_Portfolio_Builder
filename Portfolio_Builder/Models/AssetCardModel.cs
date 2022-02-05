@@ -123,29 +123,32 @@ namespace Portfolio_Builder.Models
         {
             get => _setTimeFrame6M;
         }
-
+        private readonly RelayCommand _setTimeFrame9M;
+        public RelayCommand SetTimeFrame9M
+        {
+            get => _setTimeFrame9M;
+        }
         private readonly RelayCommand _setTimeFrame1Y;
         public RelayCommand SetTimeFrame1Y
         {
             get => _setTimeFrame1Y;
         }
 
+        private readonly RelayCommand _setTimeFrame2Y;
+        public RelayCommand SetTimeFrame2Y
+        {
+            get => _setTimeFrame2Y;
+        }
         private readonly RelayCommand _setTimeFrame3Y;
         public RelayCommand SetTimeFrame3Y
         {
             get => _setTimeFrame3Y;
         }
 
-        private readonly RelayCommand _setTimeFrame5Y;
-        public RelayCommand SetTimeFrame5Y
+        private readonly RelayCommand _setTimeFrame4Y;
+        public RelayCommand SetTimeFrame4Y
         {
-            get => _setTimeFrame5Y;
-        }
-
-        private readonly RelayCommand _setTimeFrame10Y;
-        public RelayCommand SetTimeFrame10Y
-        {
-            get => _setTimeFrame10Y;
+            get => _setTimeFrame4Y;
         }
 
         public AssetCardModel()
@@ -167,10 +170,11 @@ namespace Portfolio_Builder.Models
 
             _setTimeFrame3M = new RelayCommand(() => SetTimeFrame(90));
             _setTimeFrame6M = new RelayCommand(() => SetTimeFrame(180));
+            _setTimeFrame9M = new RelayCommand(() => SetTimeFrame(270));
             _setTimeFrame1Y = new RelayCommand(() => SetTimeFrame(365));
+            _setTimeFrame2Y = new RelayCommand(() => SetTimeFrame(730));
             _setTimeFrame3Y = new RelayCommand(() => SetTimeFrame(1095));
-            _setTimeFrame5Y = new RelayCommand(() => SetTimeFrame(1825));
-            _setTimeFrame10Y = new RelayCommand(() => SetTimeFrame(3650));
+            _setTimeFrame4Y = new RelayCommand(() => SetTimeFrame(1460));
 
             _maxXChartValue = DateTime.Now.Ticks;
             _minXChartValue = DateTime.Now.Subtract(new TimeSpan(365, 0, 0, 0)).Ticks;

@@ -10,20 +10,20 @@ namespace Portfolio_Builder.BusinessLogic
     {
         private readonly DatabaseManagement databaseManagement = new();
 
-        public ObservableCollection<AssetCardModel> CreateWatchlistAssetCardCollection()
+        public ObservableCollection<AssetCardModel> CreateWatchlistAssetCardCollection(string watchlist)
         {
             ObservableCollection<AssetCardModel> assetCardModels = new();
-            foreach (string assetSymbol in databaseManagement.GetItemsOnWatchlist("Asset"))
+            foreach (string assetSymbol in databaseManagement.GetItemsOnWatchlist("Asset", watchlist))
             {
                 assetCardModels.Add(CreateAssetCard(assetSymbol));
             }
             return assetCardModels;
         }
 
-        public ObservableCollection<MarketCardModel> CreateWatchlistMarketCardCollection()
+        public ObservableCollection<MarketCardModel> CreateWatchlistMarketCardCollection(string watchlist)
         {
             ObservableCollection<MarketCardModel> marketCardModels = new();
-            foreach (string name in databaseManagement.GetItemsOnWatchlist("Market"))
+            foreach (string name in databaseManagement.GetItemsOnWatchlist("Market", watchlist))
             {
                 marketCardModels.Add(CreateMarketCard(name));
             }

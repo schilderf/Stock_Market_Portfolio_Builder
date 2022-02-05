@@ -80,7 +80,7 @@ namespace Portfolio_Builder.BusinessLogic
                 PointGeometry = null,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Stroke = Brushes.LightSteelBlue
+                Stroke = Brushes.Gold
             };
 
             seriesCollection.Add(series);
@@ -101,12 +101,12 @@ namespace Portfolio_Builder.BusinessLogic
             };
             if (type == "Base")
             {
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(5, 0, 100), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(0, 0, 100), 0));
                 gradientBrush.GradientStops.Add(new GradientStop(Colors.Transparent, 1));
             }
             else
             {
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(20, 41, 69), 0));
+                gradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(218, 165, 32), 0));
                 gradientBrush.GradientStops.Add(new GradientStop(Colors.Transparent, 1));
             }
 

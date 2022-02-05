@@ -11,6 +11,25 @@ namespace Portfolio_Builder.ViewModels
     public class MainWindowViewModel : ObservableRecipient
     {
         private readonly WatchlistManagement watchlist = new();
+        private ObservableCollection<string> _watchlistCollection;
+        public ObservableCollection<string> WatchlistCollection
+        {
+            get => _watchlistCollection;
+            set => SetProperty(ref _watchlistCollection, value);
+        }
+        private string _selectedWatchlist;
+        public string SelectedWatchlist
+        {
+            get => _selectedWatchlist;
+            set
+            {
+                SetProperty(ref _selectedWatchlist, value);
+                watchlist.ChangeWatchlist(_selectedWatchlist);
+                StockCardCollection = watchlist.AssetCardsOnWatchlist;
+                MarketCardCollection = watchlist.MarketCardsOnWatchlist;
+            } 
+                
+        }
         private string _marketHeadline;
 
         public string MarketHeadline
@@ -43,6 +62,9 @@ namespace Portfolio_Builder.ViewModels
 
         public MainWindowViewModel()
         {
+
+            _selectedWatchlist = "Standard";
+            _watchlistCollection = watchlist.GetAvalableWatchlists();
             _marketHeadline = "Globale Märkte";
             _marketCardCollection = watchlist.MarketCardsOnWatchlist;
 
@@ -50,28 +72,30 @@ namespace Portfolio_Builder.ViewModels
             _stockCardCollection = watchlist.AssetCardsOnWatchlist;
 
             _openAssetScreenerCommand = new RelayCommand(() => OpenAssetScreener());
+            _openWatchlistTextDialogCommand = new RelayCommand(() => OpenWatchlistTextDialog());
+            _deleteWatchlistDialogCommand = new RelayCommand(() => DeleteWatchlistDialog());
 
             Messenger.Register<WatchlistAddAssetMessage>(this, (r, m) =>
             {
-                watchlist.AddAssetToWatchlist(m.Value);
+                AddAssetToWatchlist(m.Value);
                 StockCardCollection = watchlist.AssetCardsOnWatchlist;
             });
 
             Messenger.Register<WatchlistDeleteAssetMessage>(this, (r, m) =>
             {
-                watchlist.DeleteAssetFromWatchlist(m.Value);
+                DeleteAssetFromWatchlist(m.Value);
                 StockCardCollection= watchlist.AssetCardsOnWatchlist;
             });
 
             Messenger.Register<WatchlistAddMarketMessage>(this, (r, m) =>
             {
-                watchlist.AddMarketToWatchlist(m.Value);
+                AddMarketToWatchlist(m.Value);
                 MarketCardCollection = watchlist.MarketCardsOnWatchlist;
             });
 
             Messenger.Register<WatchlistDeleteMarketMessage>(this, (r, m) =>
             {
-                watchlist.DeleteMarketFromWatchlist(m.Value);
+                DeleteMarketFromWatchlist(m.Value);
                 MarketCardCollection = watchlist.MarketCardsOnWatchlist;
             });
         }
@@ -87,6 +111,54 @@ namespace Portfolio_Builder.ViewModels
         {
             AssetScreenerView assetScreenerView = new();
             assetScreenerView.ShowDialog();
+        }
+
+        private RelayCommand _openWatchlistTextDialogCommand;
+        public RelayCommand OpenWatchlistTextDialogCommand
+        {
+            get => _openWatchlistTextDialogCommand;
+            set => SetProperty(ref _openWatchlistTextDialogCommand, value);
+        }
+        public void OpenWatchlistTextDialog()
+        {
+            TextInputPromptView text = new();
+            if (text.ShowDialog() ?? false)
+            {
+                WatchlistCollection.Add(text.Response);
+                SelectedWatchlist = text.Response;
+            }
+        }
+
+        private RelayCommand _deleteWatchlistDialogCommand;
+        public RelayCommand DeleteWatchlistDialogCommand
+        {
+            get => _deleteWatchlistDialogCommand;
+            set => SetProperty(ref _deleteWatchlistDialogCommand, value);
+        }
+        public void DeleteWatchlistDialog()
+        {
+            if (new ConfirmPromptView().ShowDialog() ?? false)
+            {
+                watchlist.DeleteWatchlist(SelectedWatchlist);
+                WatchlistCollection.Remove(SelectedWatchlist);
+            }
+        }
+
+        public void AddAssetToWatchlist(string assetSymbol)
+        {
+            watchlist.AddAssetToWatchlist(assetSymbol, SelectedWatchlist);
+        }
+        public void DeleteAssetFromWatchlist(AssetCardModel assetCard)
+        {
+            watchlist.DeleteAssetFromWatchlist(assetCard, SelectedWatchlist);
+        }
+        public void AddMarketToWatchlist(string marketName)
+        {
+            watchlist.AddMarketToWatchlist(marketName, SelectedWatchlist);
+        }
+        public void DeleteMarketFromWatchlist(MarketCardModel marketCard)
+        {
+            watchlist.DeleteMarketFromWatchlist(marketCard, SelectedWatchlist);
         }
     }
 }

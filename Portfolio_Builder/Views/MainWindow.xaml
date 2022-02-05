@@ -9,7 +9,7 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
         mc:Ignorable="d"
         Style="{DynamicResource CustomWindowStyle}"
-        Title="Portfolio Builder" Height="800" Width="1300">
+        Title="Portfolio Builder" Height="800" Width="1350">
     <Window.DataContext>
         <viewmodel:MainWindowViewModel />
     </Window.DataContext>
@@ -22,7 +22,13 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Name="Search" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding OpenAssetScreenerCommand}" Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,10" Height="40" Width="500" FontSize="25" Content="Basiswert suchen 🔍" Cursor="Hand"/>
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button  Name="Search" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding OpenAssetScreenerCommand}" HorizontalAlignment="Center" Margin="10" Height="40" Width="350" FontSize="25" Content="Basiswert suchen 🔍" Cursor="Hand"/>
+                <TextBlock Name="WatchlistSelectionCaption" HorizontalAlignment="Center" Margin="40,10,5,10" Height="50" FontSize="25" Text="Watchlist:"/>
+                <ComboBox Name="WatchlistSelection" ItemsSource="{Binding WatchlistCollection}" SelectedItem="{Binding SelectedWatchlist}" HorizontalAlignment="Center" Margin="10,10,40,10" Height="40" Width="350" FontSize="25"/>
+                <Button  Name="AddNewWatchlist" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding OpenWatchlistTextDialogCommand}" Width="150" HorizontalAlignment="Center" Margin="10" Height="40" FontSize="25" Content="Neu 📝" Cursor="Hand"/>
+                <Button  Name="DeleteWatchlist" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding DeleteWatchlistDialogCommand}" Width="150" HorizontalAlignment="Center" Margin="10" Height="40" FontSize="25" Content="Löschen ❌" Cursor="Hand"/>
+            </StackPanel>
             <ScrollViewer Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -37,155 +43,156 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Name="MarketHeadline" Text="{Binding MarketHeadline}" HorizontalAlignment="Left" FontSize="30" Height="40" Margin="100,5,0,5"/>
                     <ItemsControl Grid.Row="1" Name="Markets" ItemsSource="{Binding MarketCardCollection}" HorizontalAlignment="Center" Margin="40,0,0,0">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel HorizontalAlignment="Center"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
                                 <Border BorderBrush="#FF1c1c1c" BorderThickness="2"  CornerRadius="5" Padding="20" Margin="20" Background="#FF262626">
-                                        <Grid Margin="10" Width="{Binding CardWidth}" Height="675" >
-                                            <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" MinWidth="460" MaxWidth="460"/>
-                                            <ColumnDefinition Width="40" MinWidth="40"/>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="50"/>
-                                                <RowDefinition Height="0"/>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="35"/>
-                                                <RowDefinition Height="1.4*"/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="{Binding NameFontSize}" Text="{Binding Name}" />
-                                        <Button Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource RoundedCorners}" Command="{Binding DeleteCardCommand}" Content="🗑" Width="40" Height="40" FontSize="20" Margin="20,0,5,0" HorizontalAlignment="Right"/>
-                                        <Button Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="20" Command="{Binding SwitchCardWidth}" Content="▶" VerticalAlignment="Stretch" HorizontalAlignment="Right" Margin="20,15,5,15" />
-                                        <ListBox Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" ItemsSource="{Binding Assets}" SelectedItem="{Binding SelectedAsset, Mode=TwoWay}" Margin="15" FontSize="20">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                        <TextBlock Text="{Binding Symbol}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                                                        <TextBlock Text="{Binding Name}" Width ="350" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                                                        <TextBlock Text="{Binding Category}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding CategoryColor}"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                        <lvc:CartesianChart Grid.Row="2" Series="{Binding Chart}" Zoom="Xy">
-                                                <lvc:CartesianChart.DataTooltip>
-                                                    <lvc:DefaultTooltip  Background="DarkSlateBlue" Foreground="White" CornerRadius="2" BorderThickness="0.5" BorderBrush="MediumSlateBlue" ShowSeries="False" ShowTitle="False" SelectionMode="OnlySender"/>
-                                                </lvc:CartesianChart.DataTooltip>
-                                                <lvc:CartesianChart.AxisX>
-                                                    <lvc:Axis LabelFormatter="{Binding XFormatter}" MinValue="{Binding MinXChartValue}" MaxValue="{Binding MaxXChartValue}">
-                                                        <lvc:Axis.Separator >
-                                                            <lvc:Separator StrokeThickness="0.1" Step="{Binding SeparatorStep}"/>
-                                                        </lvc:Axis.Separator>
-                                                    </lvc:Axis>
-                                                </lvc:CartesianChart.AxisX>
-                                                <lvc:CartesianChart.AxisY>
-                                                    <lvc:Axis LabelFormatter="{Binding YFormatter}">
-                                                        <lvc:Axis.Separator >
-                                                            <lvc:Separator StrokeThickness="0.1"/>
-                                                        </lvc:Axis.Separator>
-                                                    </lvc:Axis>
-                                                </lvc:CartesianChart.AxisY>
-                                            </lvc:CartesianChart>
-                                            <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" Background="#FF1c1c1c" />
-                                            <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}">3M</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}">6M</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame1Y}">1Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3Y}">3Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame5Y}">5Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame10Y}">Max</Button>
-                                            </StackPanel>
-                                            <Grid Grid.Row="4">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="60"/>
-                                                    <RowDefinition Height="30"/>
-                                                    <RowDefinition Height="60"/>
-                                                    <RowDefinition Height="30"/>
-                                                    <RowDefinition Height="60"/>
-                                                    <RowDefinition Height="30"/>
-                                                    <RowDefinition Height="60"/>
-                                                </Grid.RowDefinitions>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                                    <TextBlock Grid.Row="0" Margin="0,0,25,0" FontSize="{Binding CurrentValueFontSize}" Text="{Binding CurrentValueCaption}" VerticalAlignment="Center" />
-                                                    <TextBlock Grid.Row="0" FontSize="{Binding CurrentValueFontSize}" Text="{Binding CurrentValue}" VerticalAlignment="Center" />
+                                    <Grid Margin="10" Width="{Binding CardWidth}" Height="675" >
+                                        <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" MinWidth="460" MaxWidth="460"/>
+                                        <ColumnDefinition Width="40" MinWidth="40"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="50"/>
+                                            <RowDefinition Height="0"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="35"/>
+                                            <RowDefinition Height="1.4*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="{Binding NameFontSize}" Text="{Binding Name}" />
+                                    <Button Grid.Row="0" Grid.ColumnSpan="2" Style="{StaticResource RoundedCorners}" Command="{Binding DeleteCardCommand}" Content="🗑" Width="40" Height="40" FontSize="20" Margin="20,0,5,0" HorizontalAlignment="Right"/>
+                                    <Button Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Width="20" Command="{Binding SwitchCardWidth}" Content="▶" VerticalAlignment="Stretch" HorizontalAlignment="Right" Margin="20,15,5,15" />
+                                    <ListBox Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" ItemsSource="{Binding Assets}" SelectedItem="{Binding SelectedAsset, Mode=TwoWay}" Margin="15" FontSize="20">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding Symbol}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                                                    <TextBlock Text="{Binding Name}" Width ="350" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                                                    <TextBlock Text="{Binding Category}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding CategoryColor}"/>
                                                 </StackPanel>
-                                                <TextBlock Grid.Row="1" HorizontalAlignment="Left" FontSize="14" Text="Performance:" />
-                                                <ScrollViewer Grid.Row="2" Style="{StaticResource HorizontalScroller}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                                    <ItemsControl  ItemsSource="{Binding Changes}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <StackPanel Orientation="Horizontal" />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <Grid>
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="*"/>
-                                                                        <RowDefinition Height="*"/>
-                                                                    </Grid.RowDefinitions>
-                                                                    <TextBlock Grid.Row="0" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding KpiFontSize}" Text="{Binding Value}" />
-                                                                    <TextBlock Grid.Row="1" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding CaptionFontSize}" Text="{Binding Timeframe}" />
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </ScrollViewer>
-                                                <TextBlock Grid.Row="3" HorizontalAlignment="Left" FontSize="14" Text="Höchstwerte:" />
-                                                <ScrollViewer Grid.Row="4" Style="{StaticResource HorizontalScroller}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                                    <ItemsControl ItemsSource="{Binding MaxValues}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <WrapPanel />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <Grid>
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="*"/>
-                                                                        <RowDefinition Height="*"/>
-                                                                    </Grid.RowDefinitions>
-                                                                    <TextBlock Grid.Row="0" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding KpiFontSize}" Text="{Binding Value}" />
-                                                                    <TextBlock Grid.Row="1" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding CaptionFontSize}" Text="{Binding Timeframe}" />
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </ScrollViewer>
-                                                <TextBlock Grid.Row="5" HorizontalAlignment="Left" FontSize="14" Text="Tiefstwerte:" />
-                                                <ScrollViewer Grid.Row="6" Style="{StaticResource HorizontalScroller}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                                    <ItemsControl ItemsSource="{Binding MinValues}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <WrapPanel />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <Grid>
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="*"/>
-                                                                        <RowDefinition Height="*"/>
-                                                                    </Grid.RowDefinitions>
-                                                                    <TextBlock Grid.Row="0" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding KpiFontSize}" Text="{Binding Value}" />
-                                                                    <TextBlock Grid.Row="1" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding CaptionFontSize}" Text="{Binding Timeframe}" />
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </ScrollViewer>
-                                            </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <lvc:CartesianChart Grid.Row="2" Series="{Binding Chart}" Zoom="Xy">
+                                            <lvc:CartesianChart.DataTooltip>
+                                                <lvc:DefaultTooltip  Background="DarkSlateBlue" Foreground="White" CornerRadius="2" BorderThickness="0.5" BorderBrush="MediumSlateBlue" ShowSeries="False" ShowTitle="False" SelectionMode="OnlySender"/>
+                                            </lvc:CartesianChart.DataTooltip>
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis LabelFormatter="{Binding XFormatter}" MinValue="{Binding MinXChartValue}" MaxValue="{Binding MaxXChartValue}">
+                                                    <lvc:Axis.Separator >
+                                                        <lvc:Separator StrokeThickness="0.1" Step="{Binding SeparatorStep}"/>
+                                                    </lvc:Axis.Separator>
+                                                </lvc:Axis>
+                                            </lvc:CartesianChart.AxisX>
+                                            <lvc:CartesianChart.AxisY>
+                                                <lvc:Axis LabelFormatter="{Binding YFormatter}">
+                                                    <lvc:Axis.Separator >
+                                                        <lvc:Separator StrokeThickness="0.1"/>
+                                                    </lvc:Axis.Separator>
+                                                </lvc:Axis>
+                                            </lvc:CartesianChart.AxisY>
+                                        </lvc:CartesianChart>
+                                        <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" Background="#FF1c1c1c" />
+                                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}" Width="50">3M</Button>
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}" Width="50">6M</Button>
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame9M}" Width="50">9M</Button>
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame1Y}" Width="50">1Y</Button>
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame2Y}" Width="50">2Y</Button>
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3Y}" Width="50">3Y</Button>
+                                            <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame4Y}" Width="50">4Y</Button>
+                                        </StackPanel>
+                                        <Grid Grid.Row="4">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="60"/>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="60"/>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="60"/>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="60"/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                                <TextBlock Grid.Row="0" Margin="0,0,25,0" FontSize="{Binding CurrentValueFontSize}" Text="{Binding CurrentValueCaption}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Row="0" FontSize="{Binding CurrentValueFontSize}" Text="{Binding CurrentValue}" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="1" HorizontalAlignment="Left" FontSize="14" Text="Performance:" />
+                                            <ScrollViewer Grid.Row="2" Style="{StaticResource HorizontalScroller}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                                <ItemsControl  ItemsSource="{Binding Changes}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+                                                                <TextBlock Grid.Row="0" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding KpiFontSize}" Text="{Binding Value}" />
+                                                                <TextBlock Grid.Row="1" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding CaptionFontSize}" Text="{Binding Timeframe}" />
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                            <TextBlock Grid.Row="3" HorizontalAlignment="Left" FontSize="14" Text="Höchstwerte:" />
+                                            <ScrollViewer Grid.Row="4" Style="{StaticResource HorizontalScroller}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                                <ItemsControl ItemsSource="{Binding MaxValues}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+                                                                <TextBlock Grid.Row="0" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding KpiFontSize}" Text="{Binding Value}" />
+                                                                <TextBlock Grid.Row="1" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding CaptionFontSize}" Text="{Binding Timeframe}" />
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                            <TextBlock Grid.Row="5" HorizontalAlignment="Left" FontSize="14" Text="Tiefstwerte:" />
+                                            <ScrollViewer Grid.Row="6" Style="{StaticResource HorizontalScroller}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                                <ItemsControl ItemsSource="{Binding MinValues}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+                                                                <TextBlock Grid.Row="0" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding KpiFontSize}" Text="{Binding Value}" />
+                                                                <TextBlock Grid.Row="1" Width="{Binding Width}" Height="{Binding Height}" FontSize="{Binding CaptionFontSize}" Text="{Binding Timeframe}" />
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
                                         </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <TextBlock  Name="StockHeadline" Text="{Binding StockHeadline}" Grid.Row="2" FontSize="30" Height="40" HorizontalAlignment="Left" Margin="100,5,0,5"/>
                     <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"> 
                         <ItemsControl Name="Stocks" ItemsSource="{Binding StockCardCollection}" HorizontalAlignment="Center" Margin="40,0,0,0">
@@ -232,12 +239,13 @@
                                             </lvc:CartesianChart>
                                             <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" Background="#FF1c1c1c" />
                                             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}">3M</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}">6M</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame1Y}">1Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3Y}">3Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame5Y}">5Y</Button>
-                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame10Y}">Max</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}" Width="55">3M</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}" Width="55">6M</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame9M}" Width="55">9M</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame1Y}" Width="55">1Y</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame2Y}" Width="55">2Y</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3Y}" Width="55">3Y</Button>
+                                                <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame4Y}" Width="55">4Y</Button>
                                             </StackPanel>
                                             <Grid Grid.Row="4">
                                                 <Grid.RowDefinitions>

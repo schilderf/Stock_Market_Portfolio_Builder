@@ -406,12 +406,12 @@ namespace Portfolio_Builder.BusinessLogic
             return assetScores;
         }
 
-        public List<string> GetItemsOnWatchlist(string type)
+        public List<string> GetItemsOnWatchlist(string type, string watchlist)
         {
             List<string> assetsOnWatchlist = new();
             if (OpenConnection())
             {
-                string sqlQueryText = $"Select Name From Watchlist Where Type = '{type}'";
+                string sqlQueryText = $"Select Asset_Name From Watchlist Where Type = '{type}' and Watchlist_Name = '{watchlist}'";
                 MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
@@ -419,7 +419,7 @@ namespace Portfolio_Builder.BusinessLogic
                 {
                     try
                     {
-                        assetsOnWatchlist.Add(dataReader["Name"].ToString() ?? "");
+                        assetsOnWatchlist.Add(dataReader["Asset_Name"].ToString() ?? "");
                     }
                     catch (Exception)
                     {
@@ -431,11 +431,11 @@ namespace Portfolio_Builder.BusinessLogic
             }
             return assetsOnWatchlist;
         }
-        public void AddItemToWatchlist(string name,string type)
+        public void AddItemToWatchlist(string name,string type, string watchlist)
         {
             if (OpenConnection())
             {
-                string sqlQueryText = $"Insert Into Watchlist (Name, Type) Values ('{name}', '{type}')";
+                string sqlQueryText = $"Insert Into Watchlist (Watchlist_Name, Asset_Name, Type) Values ('{watchlist}', '{name}', '{type}')";
                 MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 try
                 {
@@ -447,11 +447,48 @@ namespace Portfolio_Builder.BusinessLogic
                 this.CloseConnection();
             }
         }
-        public void DeleteItemFromWatchlist(string name, string type)
+        public void DeleteItemFromWatchlist(string name, string type, string watchlist)
         {
             if (OpenConnection())
             {
-                string sqlQueryText = $"Delete From Watchlist Where Name = '{name}' and Type = '{type}'";
+                string sqlQueryText = $"Delete From Watchlist Where Asset_Name = '{name}' and Type = '{type}' and Watchlist_Name = '{watchlist}'";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                sqlCommand.ExecuteNonQuery();
+                this.CloseConnection();
+            }
+        }
+
+        public ObservableCollection<string> GetAvalableWatchlists()
+        {
+            ObservableCollection<string> watchlists = new();
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Select Watchlist_Name From Watchlist Group By Watchlist_Name";
+                MySqlCommand sqlCommand = new(sqlQueryText, connection);
+                MySqlDataReader dataReader = sqlCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    try
+                    {
+                        watchlists.Add(dataReader["Watchlist_Name"].ToString() ?? "");
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                dataReader.Close();
+
+                this.CloseConnection();
+            }
+            return watchlists;
+        }
+
+        public void DeleteWatchlist(string watchlist)
+        {
+            if (OpenConnection())
+            {
+                string sqlQueryText = $"Delete From Watchlist Where Watchlist_Name = '{watchlist}'";
                 MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 sqlCommand.ExecuteNonQuery();
                 this.CloseConnection();
