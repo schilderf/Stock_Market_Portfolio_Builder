@@ -10,7 +10,7 @@ namespace Portfolio_Builder.ViewModels
 {
     public class MainWindowViewModel : ObservableRecipient
     {
-        private readonly WatchlistManagement watchlist = new();
+        private readonly WatchlistManagement watchlist;
         private ObservableCollection<string> _watchlistCollection;
         public ObservableCollection<string> WatchlistCollection
         {
@@ -24,7 +24,7 @@ namespace Portfolio_Builder.ViewModels
             set
             {
                 SetProperty(ref _selectedWatchlist, value);
-                watchlist.ChangeWatchlist(_selectedWatchlist);
+                watchlist.ChangeWatchlist(value);
                 StockCardCollection = watchlist.AssetCardsOnWatchlist;
                 MarketCardCollection = watchlist.MarketCardsOnWatchlist;
             } 
@@ -60,16 +60,39 @@ namespace Portfolio_Builder.ViewModels
             set => SetProperty(ref _stockCardCollection, value);
         }
 
+        private bool _chartVisibility;
+        public bool ChartVisibility
+        {
+            get => _chartVisibility;
+            set
+            {
+                SetProperty(ref _chartVisibility, value);
+                Messenger.Send(new ChartVisibilityChangedMessage(value));
+                watchlist.UpdateCardsOnWatchlist();
+            }
+        }
+
         public MainWindowViewModel()
         {
+            Messenger.Register<RequestChartVisibilityMessage>(this, (r, m) =>
+            {
+                try
+                {
+                    m.Reply(false);
+                }
+                catch { }
+            });
 
-            _selectedWatchlist = "Standard";
+            watchlist = new();
+            _selectedWatchlist = "All Cards";
             _watchlistCollection = watchlist.GetAvalableWatchlists();
             _marketHeadline = "Globale Märkte";
             _marketCardCollection = watchlist.MarketCardsOnWatchlist;
+            _marketCardCollection = new();
 
             _stockHeadline = "Einzelne Aktien";
             _stockCardCollection = watchlist.AssetCardsOnWatchlist;
+            _stockCardCollection = new();
 
             _openAssetScreenerCommand = new RelayCommand(() => OpenAssetScreener());
             _openWatchlistTextDialogCommand = new RelayCommand(() => OpenWatchlistTextDialog());
@@ -110,7 +133,7 @@ namespace Portfolio_Builder.ViewModels
         public static void OpenAssetScreener()
         {
             AssetScreenerView assetScreenerView = new();
-            assetScreenerView.ShowDialog();
+            assetScreenerView.Show();
         }
 
         private RelayCommand _openWatchlistTextDialogCommand;

@@ -360,6 +360,7 @@ namespace Portfolio_Builder.BusinessLogic
             if (OpenConnection())
             {
                 string sqlQueryText = $"Select Type, Market_Score.Name, Value_Change From Market_Score Join Market On Market_Score.Name = Market.Name Order By Type";
+                //string sqlQueryText = $"Select Name, Type From Market Order By Type";
                 MySqlCommand sqlCommand = new(sqlQueryText, connection);
                 MySqlDataReader dataReader = sqlCommand.ExecuteReader();
 
@@ -368,6 +369,7 @@ namespace Portfolio_Builder.BusinessLogic
                     try
                     {
                         marketScores.Add(new(dataReader["Name"].ToString() ?? "", ConvertToDouble(dataReader["Value_Change"].ToString() ?? "0"), dataReader["Type"].ToString() ?? ""));
+                        //marketScores.Add(new(dataReader["Name"].ToString() ?? "", 0, dataReader["Type"].ToString() ?? ""));
                     }
                     catch (Exception)
                     {

@@ -1,4 +1,6 @@
-﻿using Portfolio_Builder.Models;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Messaging;
+using Portfolio_Builder.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,9 +8,25 @@ using System.Linq;
 
 namespace Portfolio_Builder.BusinessLogic
 {
-    public class CardFactory
+    public class CardFactory : ObservableRecipient
     {
         private readonly DatabaseManagement databaseManagement = new();
+        private bool _chartVisibility;
+        private bool ChartVisibility
+        {
+            get => _chartVisibility;
+            set => _chartVisibility = value;
+        }
+
+        public CardFactory()
+        {
+            _chartVisibility = Messenger.Send<RequestChartVisibilityMessage>();
+
+            Messenger.Register<ChartVisibilityChangedMessage>(this, (r, m) =>
+            {
+                ChartVisibility = m.Value;
+            });
+        }
 
         public ObservableCollection<AssetCardModel> CreateWatchlistAssetCardCollection(string watchlist)
         {
@@ -36,7 +54,14 @@ namespace Portfolio_Builder.BusinessLogic
             AssetCardModel assetCardModel = new();
             assetCardModel.Symbol = asset.Symbol;
             assetCardModel.Name = asset.Name;
-            assetCardModel.PriceChart = ChartFactory.InitializeAssetChart(asset);
+
+            if (ChartVisibility)
+                assetCardModel.PriceChart = ChartFactory.InitializeAssetChart(asset);
+            else
+                assetCardModel.PriceChart = new();
+
+
+            assetCardModel.NotChartVisibility = !assetCardModel.PriceChartVisible;
             assetCardModel.PriceChanges = CalculatePerformances(assetTickerSymbol, "Asset");
             assetCardModel.MaxValues = FindMaxValues(assetTickerSymbol, "Asset");
             assetCardModel.MinValues = FindMinValues(assetTickerSymbol, "Asset");
@@ -47,12 +72,38 @@ namespace Portfolio_Builder.BusinessLogic
             return assetCardModel;
         }
 
+        public void UpdateAssetCardCollection(ObservableCollection<AssetCardModel> assetCardModelCollection)
+        {
+            foreach (AssetCardModel assetCardModel in assetCardModelCollection)
+            {
+                UpdateAssetCard(assetCardModel);
+            }
+        }
+
+        private void UpdateAssetCard(AssetCardModel assetCardModel)
+        {
+            Asset asset = databaseManagement.CreateAsset(assetCardModel.Symbol);
+
+            if (ChartVisibility)
+                assetCardModel.PriceChart = ChartFactory.InitializeAssetChart(asset);
+            else
+                assetCardModel.PriceChart = new();
+
+            assetCardModel.NotChartVisibility = !assetCardModel.PriceChartVisible;
+        }
+
         public MarketCardModel CreateMarketCard(string marketName)
         {
             Market market = databaseManagement.CreateMarket(marketName);
             MarketCardModel marketCardModel = new();
             marketCardModel.Name = market.Name;
-            marketCardModel.Chart = ChartFactory.InitializeMarketChart(market);
+
+            if (ChartVisibility)
+                marketCardModel.Chart = ChartFactory.InitializeMarketChart(market);
+            else
+                marketCardModel.Chart = new();
+
+            marketCardModel.NotChartVisibility = !marketCardModel.PriceChartVisible;
             marketCardModel.Changes = CalculatePerformances(marketName, "Market");
             marketCardModel.MaxValues = FindMaxValues(marketName, "Market");
             marketCardModel.MinValues = FindMinValues(marketName, "Market");
@@ -63,6 +114,26 @@ namespace Portfolio_Builder.BusinessLogic
 
             return marketCardModel;
         }
+
+        public void UpdateMarketCardCollection(ObservableCollection<MarketCardModel> marketCardModelCollection)
+        {
+            foreach (MarketCardModel marketCardModel in marketCardModelCollection)
+            {
+                UpdateMarketCard(marketCardModel);
+            }
+        }
+        private void UpdateMarketCard(MarketCardModel marketCardModel)
+        {
+            Market market = databaseManagement.CreateMarket(marketCardModel.Name);
+
+            if (ChartVisibility)
+                marketCardModel.Chart = ChartFactory.InitializeMarketChart(market);
+            else
+                marketCardModel.Chart = new();
+
+            marketCardModel.NotChartVisibility = !marketCardModel.PriceChartVisible;
+        }
+
         private ObservableCollection<PerformanceCardModel> CalculatePerformances(string assetTickerSymbol, string type)
         {
             ObservableCollection<PerformanceCardModel> results = new();

@@ -29,11 +29,32 @@ namespace Portfolio_Builder.Models
             get => _nameFontSize;
         }
 
-        private SeriesCollection _chart;
+        private SeriesCollection? _chart;
         public SeriesCollection Chart
         {
-            get => _chart;
+            get => _chart ?? new();
             set => SetProperty(ref _chart, value);
+        }
+
+        private bool _priceChartVisible;
+        public bool PriceChartVisible
+        {
+            get => _priceChartVisible;
+            set
+            {
+                SetProperty(ref _priceChartVisible, value);
+                NotChartVisibility = !value;
+            }
+        }
+
+        private bool _notChartVisibility;
+        public bool NotChartVisibility
+        {
+            get => _notChartVisibility;
+            set
+            {
+                SetProperty(ref _notChartVisibility, value);
+            }
         }
 
         private string _currentValue;
@@ -215,7 +236,12 @@ namespace Portfolio_Builder.Models
             _minXChartValue = DateTime.Now.Subtract(new TimeSpan(365, 0, 0, 0)).Ticks;
             _separatorStep = TimeSpan.FromDays(90).Ticks;
             XFormatter = val => new DateTime((long)val).ToString("MMM yyyy");
-            YFormatter = val => val.ToString();
+            YFormatter = val => val.ToString("C");
+
+            Messenger.Register<ChartVisibilityChangedMessage>(this, (r, m) =>
+            {
+                PriceChartVisible = m.Value;
+            });
         }
 
 

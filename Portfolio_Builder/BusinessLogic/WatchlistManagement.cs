@@ -11,8 +11,8 @@ namespace Portfolio_Builder.BusinessLogic
 {
     public class WatchlistManagement : ObservableObject
     {
-        private readonly CardFactory cardFactory = new();
-        private readonly DatabaseManagement databaseManagement = new();
+        private readonly CardFactory cardFactory;
+        private readonly DatabaseManagement databaseManagement;
 
         private ObservableCollection<AssetCardModel> _assetCardsOnWatchlist;
         public ObservableCollection<AssetCardModel> AssetCardsOnWatchlist
@@ -30,8 +30,16 @@ namespace Portfolio_Builder.BusinessLogic
 
         public WatchlistManagement()
         {
+            cardFactory = new();
+            databaseManagement = new();
             _assetCardsOnWatchlist = cardFactory.CreateWatchlistAssetCardCollection("Standard");
             _marketCardsOnWatchlist = cardFactory.CreateWatchlistMarketCardCollection("Standard");
+        }
+
+        public void UpdateCardsOnWatchlist()
+        {
+            cardFactory.UpdateAssetCardCollection(AssetCardsOnWatchlist);
+            cardFactory.UpdateMarketCardCollection(MarketCardsOnWatchlist);
         }
 
         public ObservableCollection<string> GetAvalableWatchlists()

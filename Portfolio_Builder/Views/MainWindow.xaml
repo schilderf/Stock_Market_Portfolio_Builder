@@ -25,9 +25,14 @@
             <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button  Name="Search" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding OpenAssetScreenerCommand}" HorizontalAlignment="Center" Margin="10" Height="40" Width="350" FontSize="25" Content="Basiswert suchen 🔍" Cursor="Hand"/>
                 <TextBlock Name="WatchlistSelectionCaption" HorizontalAlignment="Center" Margin="40,10,5,10" Height="50" FontSize="25" Text="Watchlist:"/>
-                <ComboBox Name="WatchlistSelection" ItemsSource="{Binding WatchlistCollection}" SelectedItem="{Binding SelectedWatchlist}" HorizontalAlignment="Center" Margin="10,10,40,10" Height="40" Width="350" FontSize="25"/>
+                <ComboBox Name="WatchlistSelection" ItemsSource="{Binding WatchlistCollection}" SelectedItem="{Binding SelectedWatchlist, Mode=TwoWay}" HorizontalAlignment="Center" Margin="10,10,40,10" Height="40" Width="350" FontSize="25"/>
                 <Button  Name="AddNewWatchlist" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding OpenWatchlistTextDialogCommand}" Width="150" HorizontalAlignment="Center" Margin="10" Height="40" FontSize="25" Content="Neu 📝" Cursor="Hand"/>
                 <Button  Name="DeleteWatchlist" Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding DeleteWatchlistDialogCommand}" Width="150" HorizontalAlignment="Center" Margin="10" Height="40" FontSize="25" Content="Löschen ❌" Cursor="Hand"/>
+                <CheckBox Name="ToggleChartVisibility" IsChecked="{Binding ChartVisibility}" Margin="15,2,2,2">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="2.5" ScaleY="2.5" />
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
             </StackPanel>
             <ScrollViewer Grid.Row="1">
                 <Grid>
@@ -78,7 +83,7 @@
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
-                                    <lvc:CartesianChart Grid.Row="2" Series="{Binding Chart}" Zoom="Xy">
+                                    <lvc:CartesianChart Grid.Row="2" Series="{Binding Chart}" Visibility="{Binding PriceChartVisible}">
                                             <lvc:CartesianChart.DataTooltip>
                                                 <lvc:DefaultTooltip  Background="DarkSlateBlue" Foreground="White" CornerRadius="2" BorderThickness="0.5" BorderBrush="MediumSlateBlue" ShowSeries="False" ShowTitle="False" SelectionMode="OnlySender"/>
                                             </lvc:CartesianChart.DataTooltip>
@@ -97,8 +102,9 @@
                                                 </lvc:Axis>
                                             </lvc:CartesianChart.AxisY>
                                         </lvc:CartesianChart>
+                                        <TextBlock Grid.Row="2" Text="Not Enabled 🚫" VerticalAlignment="Center" FontSize="25" Opacity="{Binding NotChartVisibility}" />
                                         <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" Background="#FF1c1c1c" />
-                                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                        <StackPanel Grid.Row="3" Orientation="Horizontal" IsEnabled="{Binding PriceChartVisible}">
                                             <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}" Width="50">3M</Button>
                                             <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}" Width="50">6M</Button>
                                             <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame9M}" Width="50">9M</Button>
@@ -218,7 +224,7 @@
                                             <TextBlock Grid.Row="0" FontSize="{Binding SymbolFontSize}" Text="{Binding Symbol}" />
                                             <Button Grid.Row="0" Style="{StaticResource RoundedCorners}" Command="{Binding DeleteCardCommand}" Content="🗑" Width="40" Height="40" FontSize="20" HorizontalAlignment="Right"/>
                                             <TextBlock Grid.Row="1" FontSize="{Binding NameFontSize}" Text="{Binding Name}" />
-                                            <lvc:CartesianChart Grid.Row="2" Series="{Binding PriceChart}" Zoom="Xy">
+                                            <lvc:CartesianChart Grid.Row="2" Series="{Binding PriceChart}" IsEnabled="{Binding PriceChartVisible}" >
                                                 <lvc:CartesianChart.DataTooltip>
                                                     <lvc:DefaultTooltip  Background="DarkSlateBlue" Foreground="White" CornerRadius="2" BorderThickness="0.5" BorderBrush="MediumSlateBlue" ShowSeries="False" ShowTitle="False" SelectionMode="OnlySender"/>
                                                 </lvc:CartesianChart.DataTooltip>
@@ -237,8 +243,9 @@
                                                     </lvc:Axis>
                                                 </lvc:CartesianChart.AxisY>
                                             </lvc:CartesianChart>
+                                            <TextBlock Grid.Row="2" Text="Not Enabled 🚫" VerticalAlignment="Center" FontSize="25" Opacity="{Binding NotChartVisibility}" />
                                             <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" Background="#FF1c1c1c" />
-                                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                                            <StackPanel Grid.Row="3" Orientation="Horizontal" IsEnabled="{Binding PriceChartVisible}">
                                                 <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame3M}" Width="55">3M</Button>
                                                 <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame6M}" Width="55">6M</Button>
                                                 <Button Style="{StaticResource ResourceKey=RoundedCorners}" Command="{Binding SetTimeFrame9M}" Width="55">9M</Button>

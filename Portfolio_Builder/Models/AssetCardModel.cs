@@ -54,11 +54,32 @@ namespace Portfolio_Builder.Models
             get => _currentPriceCaption;
         }
 
-        private SeriesCollection _priceChart;
+        private SeriesCollection? _priceChart;
         public SeriesCollection PriceChart
         {
-            get => _priceChart;
+            get => _priceChart ?? new();
             set => SetProperty(ref _priceChart, value);
+        }
+
+        private bool _priceChartVisible;
+        public bool PriceChartVisible
+        {
+            get => _priceChartVisible;
+            set
+            {
+                SetProperty(ref _priceChartVisible, value);
+                NotChartVisibility = !value;
+            }
+        }
+
+        private bool _notChartVisibility;
+        public bool NotChartVisibility
+        {
+            get => _notChartVisibility;
+            set
+            {
+                SetProperty(ref _notChartVisibility, value);
+            }
         }
 
         private ObservableCollection<PerformanceCardModel> _priceChanges;
@@ -181,6 +202,11 @@ namespace Portfolio_Builder.Models
             _separatorStep = TimeSpan.FromDays(90).Ticks;
             XFormatter = val => new DateTime((long)val).ToString("MMM yyyy");
             YFormatter = val => val.ToString("C");
+
+            Messenger.Register<ChartVisibilityChangedMessage>(this, (r, m) =>
+            {
+                PriceChartVisible = m.Value;
+            });
         }
 
         public AssetCardModel(string symbol, string name, SeriesCollection priceChart) : this()

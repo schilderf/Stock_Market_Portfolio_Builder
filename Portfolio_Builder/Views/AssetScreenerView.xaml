@@ -23,25 +23,25 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding MarketScoreCollection}" SelectedItem="{Binding SelectedMarketScore, Mode=TwoWay}" Margin="4">
+        <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding MarketScoreCollection}" SelectedItem="{Binding SelectedMarketScore, Mode=TwoWay}" Margin="4" HorizontalAlignment="Center">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="{Binding Type}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Name}" Width ="325" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Gain}" Width ="75" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,10,0,10" Foreground="{Binding GainColor}"/>
-                        <TextBlock Text="{Binding Direction}" Width ="50" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0,10,10,10" Foreground="{Binding GainColor}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <TextBlock Text="{Binding Type}" MinWidth ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Name}" MinWidth ="325" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Gain}" MinWidth ="75" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="5,10,0,10" Foreground="{Binding GainColor}"/>
+                        <TextBlock Text="{Binding Direction}" MinWidth ="50" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0,10,10,10" Foreground="{Binding GainColor}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding AssetScoreCollection}" SelectedItem="{Binding SelectedAssetScore, Mode=OneWayToSource}" Margin="4">
+        <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding AssetScoreCollection}" SelectedItem="{Binding SelectedAssetScore, Mode=OneWayToSource}" Margin="4" HorizontalAlignment="Center">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="{Binding Symbol}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Name}" Width ="350" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
-                        <TextBlock Text="{Binding Category}" Width ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding CategoryColor}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <TextBlock Text="{Binding Symbol}" MinWidth ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Name}" MinWidth ="350" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10"/>
+                        <TextBlock Text="{Binding Category}" MinWidth ="100" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Foreground="{Binding CategoryColor}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
