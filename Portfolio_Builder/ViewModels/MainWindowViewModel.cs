@@ -84,15 +84,13 @@ namespace Portfolio_Builder.ViewModels
             });
 
             watchlist = new();
-            _selectedWatchlist = "All Cards";
+            _selectedWatchlist = "All Assets";
             _watchlistCollection = watchlist.GetAvalableWatchlists();
             _marketHeadline = "Globale Märkte";
             _marketCardCollection = watchlist.MarketCardsOnWatchlist;
-            _marketCardCollection = new();
 
             _stockHeadline = "Einzelne Aktien";
             _stockCardCollection = watchlist.AssetCardsOnWatchlist;
-            _stockCardCollection = new();
 
             _openAssetScreenerCommand = new RelayCommand(() => OpenAssetScreener());
             _openWatchlistTextDialogCommand = new RelayCommand(() => OpenWatchlistTextDialog());

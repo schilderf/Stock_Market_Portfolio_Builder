@@ -233,8 +233,8 @@ namespace Portfolio_Builder.Models
             _setTimeFrame4Y = new RelayCommand(() => SetTimeFrame(1460));
 
             _maxXChartValue = DateTime.Now.Ticks;
-            _minXChartValue = DateTime.Now.Subtract(new TimeSpan(365, 0, 0, 0)).Ticks;
-            _separatorStep = TimeSpan.FromDays(90).Ticks;
+            _minXChartValue = DateTime.Now.Subtract(new TimeSpan(180, 0, 0, 0)).Ticks;
+            _separatorStep = TimeSpan.FromDays(30).Ticks;
             XFormatter = val => new DateTime((long)val).ToString("MMM yyyy");
             YFormatter = val => val.ToString("C");
 

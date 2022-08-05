@@ -32,8 +32,8 @@ namespace Portfolio_Builder.BusinessLogic
         {
             cardFactory = new();
             databaseManagement = new();
-            _assetCardsOnWatchlist = cardFactory.CreateWatchlistAssetCardCollection("Standard");
-            _marketCardsOnWatchlist = cardFactory.CreateWatchlistMarketCardCollection("Standard");
+            _assetCardsOnWatchlist = cardFactory.CreateWatchlistAssetCardCollection("All Assets");
+            _marketCardsOnWatchlist = cardFactory.CreateWatchlistMarketCardCollection("All Assets");
         }
 
         public void UpdateCardsOnWatchlist()

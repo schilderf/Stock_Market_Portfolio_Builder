@@ -67,7 +67,7 @@ namespace Portfolio_Builder.BusinessLogic
             assetCardModel.MinValues = FindMinValues(assetTickerSymbol, "Asset");
 
             AssetDay mostRecentMarketDay = asset.MarketDays.Last();
-            assetCardModel.CurrentPrice = $"{mostRecentMarketDay.ClosingPrice}$";
+            assetCardModel.CurrentPrice = $"{mostRecentMarketDay.ClosingPrice}€";
 
             return assetCardModel;
         }
@@ -110,7 +110,7 @@ namespace Portfolio_Builder.BusinessLogic
             marketCardModel.Assets = market.Assets;
 
             MarketDay mostRecentDay = market.Days.Last();
-            marketCardModel.CurrentValue = $"{mostRecentDay.Value}$";
+            marketCardModel.CurrentValue = $"{mostRecentDay.Value}€";
 
             return marketCardModel;
         }
@@ -180,9 +180,9 @@ namespace Portfolio_Builder.BusinessLogic
                 TimeSpan timeSpan = TimeSpan.FromDays(timeFrame);
                 PerformanceCardModel performanceCardModel;
                 if (type == "Asset")
-                    performanceCardModel = new(databaseManagement.FindMaxValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame), "$");
+                    performanceCardModel = new(databaseManagement.FindMaxValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame), "€");
                 else if (type == "Market")
-                    performanceCardModel = new(databaseManagement.FindMaxMarketValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame), "$");
+                    performanceCardModel = new(databaseManagement.FindMaxMarketValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame), "€");
                 else
                     performanceCardModel = new(0, GetTimeframeToPerformanceCardCaption(timeFrame),"");
 
@@ -203,9 +203,9 @@ namespace Portfolio_Builder.BusinessLogic
                 TimeSpan timeSpan = TimeSpan.FromDays(timeFrame);
                 PerformanceCardModel performanceCardModel;
                 if (type == "Asset")
-                    performanceCardModel = new(databaseManagement.FindMinValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame),"$");
+                    performanceCardModel = new(databaseManagement.FindMinValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame),"€");
                 else if (type == "Market")
-                    performanceCardModel = new(databaseManagement.FindMinMarketValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame), "$");
+                    performanceCardModel = new(databaseManagement.FindMinMarketValue(symbol, dateTime.Subtract(timeSpan)), GetTimeframeToPerformanceCardCaption(timeFrame), "€");
                 else
                     performanceCardModel = new(0, GetTimeframeToPerformanceCardCaption(timeFrame), "");
 
